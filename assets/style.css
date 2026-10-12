@@ -12,13 +12,13 @@
   --teal-tint:#D6E9EF;
   --ink:#0D1B2A;
   --ink-2:#4A5868;
-  --ink-3:#7B8794;
+  --ink-3:#5E6A77;
   --line:#E3E8EF;
   --navy:#0B3A53;
   --navy-2:#082C40;
   --navy-tint:#DCEBF1;
   --orange:#E8932A;
-  --orange-2:#C9760E;
+  --orange-2:#9E5A05;
   --orange-tint:#FFF3E3;
   --orange-ink:#1F1406;
   --ok:#1F9D63; --err:#C2410C;
@@ -551,7 +551,7 @@ textarea{min-height:120px;resize:vertical}
 .foot .brand-text small{color:rgba(255,255,255,.55)}
 .foot .monogram{background:#fff;color:var(--navy)}
 .foot p{line-height:1.6;max-width:28em}
-.foot h4{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-bottom:16px}
+.foot h4,.foot .fh{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-bottom:16px}
 .foot ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .foot a{text-decoration:none;transition:color 160ms ease}
 .foot a:hover{color:#fff}
@@ -880,3 +880,8 @@ h1 em,h2 em{font-family:inherit;font-style:normal;font-weight:inherit;color:inhe
 .exp-band p{color:var(--ink-2);margin-top:4px}
 .exp-band:active{transform:scale(.99)}
 @media (max-width:860px){.exp-band{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* Boutons dans le contenu des articles : garder leurs couleurs */
+.art-body a.btn,.toc a.btn{text-decoration:none}
+.art-body a.btn-dark,.toc a.btn-dark{color:#fff}
+.art-body a.btn-primary,.toc a.btn-primary{color:var(--orange-ink)}

@@ -87,10 +87,8 @@ def head(meta, rel, path, extra_ld=None):
 <meta property="og:image" content="{SITE}/assets/og-image.svg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{rel}assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@1&display=swap">
-<link rel="stylesheet" href="{rel}assets/style.min.css?v={VER}">
+<link rel="preload" href="/assets/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<style>{CSS_INLINE}</style>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 </head>
 <body>
@@ -104,7 +102,7 @@ def header(rel, current):
         items.append(f'<li><a href="{rel}{href}"{cur}>{label}</a></li>')
     return f"""<header class="site-header" id="top">
   <div class="wrap nav">
-    <a class="brand" href="{rel}index.html" aria-label="{BRAND}, accueil">
+    <a class="brand" href="{rel}index.html">
       <span class="monogram" aria-hidden="true">MT</span>
       <span class="brand-text"><b>{BRAND}</b><small>Conseil en gestion de patrimoine</small></span>
     </a>
@@ -127,15 +125,15 @@ def footer(rel):
       <p>Cabinet de conseil en gestion de patrimoine indépendant. Conseiller en investissements financiers (CIF) enregistré à l'ORIAS, membre de la CNCEF Patrimoine, association agréée par l'Autorité des marchés financiers.</p>
     </div>
     <div>
-      <h4>Le cabinet</h4>
+      <p class="fh">Le cabinet</p>
       <ul><li><a href="{rel}expertises.html">Expertises</a></li><li><a href="{rel}expertises/assurance-vie.html">Assurance-vie</a></li><li><a href="{rel}expertises/plan-epargne-retraite.html">Plan d'épargne retraite</a></li><li><a href="{rel}expertises/accompagnement-dirigeants.html">Dirigeants</a></li><li><a href="{rel}cabinet.html">Qui suis-je</a></li><li><a href="{rel}simulateur.html">Simulateur</a></li><li><a href="{rel}recrutement.html">Recrutement</a></li></ul>
     </div>
     <div>
-      <h4>Ressources</h4>
+      <p class="fh">Ressources</p>
       <ul><li><a href="{rel}actualites/index.html">Actualités &amp; conseils</a></li><li><a href="{rel}actualites/per-plan-epargne-retraite-guide-2026.html">Guide du PER</a></li><li><a href="{rel}actualites/assurance-vie-fiscalite-apres-8-ans.html">Fiscalité de l'assurance-vie</a></li><li><a href="{rel}actualites/reduire-ses-impots-7-leviers-legaux.html">Réduire ses impôts</a></li></ul>
     </div>
     <div>
-      <h4>Contact</h4>
+      <p class="fh">Contact</p>
       <ul><li>{ADDR}</li><li><a href="tel:+33643642964">{PHONE}</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="{rel}rendez-vous.html">Prendre rendez-vous</a></li></ul>
     </div>
     <div class="legal">
@@ -205,6 +203,8 @@ _js = rjsmin.jsmin((ROOT / "assets/main.js").read_text(encoding="utf-8"))
 (ROOT / "assets/style.min.css").write_text(_css, encoding="utf-8")
 (ROOT / "assets/main.min.js").write_text(_js, encoding="utf-8")
 VER = hashlib.md5((_css + _js).encode()).hexdigest()[:8]
+FONT_FACE = "@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/assets/fonts/plus-jakarta-sans.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}"
+CSS_INLINE = FONT_FACE + _css
 
 def write(path, content):
     p = ROOT / path; p.parent.mkdir(parents=True, exist_ok=True)
@@ -262,9 +262,11 @@ KEYS = {
 # ---------- Logos partenaires (défilement) ----------
 FIN = [("swiss-life","Swiss Life"),("arkea","Arkéa"),("corum","Corum"),("perial-asset-management","Perial Asset Management"),("norma-capital","Norma Capital"),("eiffel-investment-group","Eiffel Investment Group"),("altaroc","Altaroc"),("eres","Eres"),("inter-invest","Inter Invest"),("inter-gestion","Inter Gestion"),("horizon-asset-management","Horizon AM"),("kyaneos","Kyaneos"),("m-capital","M Capital"),("alderian","Alderian"),("fiducial","Fiducial"),("selencia","Selencia"),("sodify","Sodify"),("digital-insure","Digital Insure"),("crequy","Crequy"),("u-wine","U'Wine"),("3-colonnes-economie-solidaire","3 Colonnes"),("prestige-immobilier","Prestige Immobilier")]
 IMMO = [("vinci","Vinci Immobilier"),("perl","Perl"),("urbat","Urbat"),("groupe-edouard-denis","Groupe Edouard Denis"),("saint-agne-groupe-immobilier","Saint-Agne"),("lp-promotion","LP Promotion"),("green-city-immobilier","Green City Immobilier"),("groupe-cailleau","Groupe Cailleau"),("groupe-cir","Groupe CIR"),("cbo-territoria","CBo Territoria"),("colonies","Colonies"),("colocatere-location-autrement","Colocatère"),("confiance-groupe-immobilier","Confiance Immobilier"),("group-flot-immobilier","Flot Immobilier"),("loftwood","Loftwood"),("village-or-residences-seniors","Village d'Or")]
+from PIL import Image as _Im
+LOGO_SIZE = {p.stem: _Im.open(p).size for p in (ROOT / "assets/partenaires").glob("*.webp")}
 def marquee(items, rel="", reverse=False, label="Nos partenaires"):
     def li(hidden):
-        return "".join(f'<li><img src="{rel}assets/partenaires/{f}.webp" alt="{n}" decoding="async" height="52"></li>' for f, n in items)
+        return "".join(f'<li><img src="{rel}assets/partenaires/{f}.webp" alt="{n}" loading="lazy" decoding="async" width="{LOGO_SIZE[f][0]}" height="{LOGO_SIZE[f][1]}"></li>' for f, n in items)
     return (f'<div class="marquee{" rev" if reverse else ""}" role="region" aria-label="{label}">'
             f'<ul class="mq-track"><li class="mq-group"><ul>{li(False)}</ul></li><li class="mq-group" aria-hidden="true"><ul>{li(True)}</ul></li></ul></div>')
 
@@ -391,6 +393,7 @@ idx = head(idx_meta, "../", "actualites/index.html", ld_idx) + header("../", "ac
   <p class="lede">Fiscalité, placements, retraite, immobilier, transmission&nbsp;: des analyses sourcées et mises à jour avec les règles en vigueur, pour éclairer vos décisions patrimoniales.</p>
 </div></section>
 <section class="s-white" style="padding-top:clamp(48px,6vw,72px)"><div class="wrap">
+  <h2 class="sr-only">Tous les articles</h2>
   <div class="filters" role="tablist" aria-label="Filtrer par thème">{filters}</div>
   <div class="posts">{cards}</div>
 </div></section>
