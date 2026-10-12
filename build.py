@@ -166,8 +166,43 @@ def _icon(name, cls):
 def icons(html_text):
     return re.sub(r'<i data-i="([a-z0-9-]+)"(?: class="([^"]*)")?></i>', lambda m: _icon(m.group(1), m.group(2) or ""), html_text)
 
+import posixpath
+def clean(u):
+    """/cabinet.html -> /cabinet ; /actualites/index.html -> /actualites ; /index.html -> /"""
+    base, frag = (u.split("#", 1) + [""])[:2]
+    q = ""
+    if "?" in base: base, q = base.split("?", 1); q = "?" + q
+    if base.endswith(".html"):
+        base = base[:-5]
+        if base.endswith("/index") or base == "index" or base == "/index": base = base[:-5] or "/"
+        if base != "/" and base.endswith("/"): base = base[:-1]
+    return base + q + ("#" + frag if frag else "")
+
+def absolutize(path, html_text):
+    """Liens internes en chemins absolus et URL propres (sans .html), pour Vercel cleanUrls."""
+    d = posixpath.dirname(path)
+    def rep(m):
+        attr, link = m.group(1), m.group(2)
+        if re.match(r"^(https?:|mailto:|tel:|#|data:|//|javascript:)", link): return m.group(0)
+        if link.startswith("/"): target = link
+        else:
+            p, _, rest = link.partition("#"); p, _, qs = p.partition("?")
+            target = "/" + posixpath.normpath(posixpath.join(d, p)) if p else "/" + path
+            target = target.replace("/./", "/")
+            if target.endswith("/."): target = target[:-1]
+            if qs: target += "?" + qs
+            if rest: target += "#" + rest
+        return f'{attr}="{clean(target)}"'
+    html_text = re.sub(r'\b(href|src|action)="([^"]*)"', rep, html_text)
+    # URL absolues du site (canonical, og, JSON-LD) sans .html
+    html_text = re.sub(re.escape(SITE) + r'(/[^"\s<>]*?\.html)', lambda m: SITE + clean(m.group(1)), html_text)
+    return html_text
+
 def write(path, content):
     p = ROOT / path; p.parent.mkdir(parents=True, exist_ok=True)
+    if path.endswith(".html"): content = absolutize(path, content)
+    elif path == "sitemap.xml": content = re.sub(re.escape(SITE) + r'(/[^<]*?\.html)', lambda m: SITE + clean(m.group(1)), content).replace(SITE + "/actualites/<", SITE + "/actualites<")
+    content = content.replace(SITE + '/actualites/"', SITE + '/actualites"').replace(SITE + '/actualites/<', SITE + '/actualites<')
     p.write_text(icons(content), encoding="utf-8"); print("✓", path)
 
 # ---------- Articles ----------

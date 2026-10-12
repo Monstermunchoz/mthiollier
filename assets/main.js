@@ -11,7 +11,7 @@
   /* ---------- Bouton rendez-vous flottant ---------- */
   var fab = $('#fab');
   if (fab) {
-    if (/rendez-vous\.html$/.test(location.pathname)) { fab.remove(); }
+    if (/rendez-vous(\.html)?$/.test(location.pathname)) { fab.remove(); }
     else {
       document.body.classList.add('has-fab');
       var hero = $('.hero, .page-head, .art-head');
@@ -111,7 +111,7 @@
         li.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:2px;color:var(--ok)"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><div><b></b><br><span></span></div>';
         li.querySelector('b').textContent = r[0]; li.querySelector('span').textContent = r[1]; l.appendChild(li);
       });
-      try { var link = $('#r-link'); if (link) link.href = 'rendez-vous.html?objet=' + encodeURIComponent(o || ''); } catch (e) {}
+      try { var link = $('#r-link'); if (link) link.href = '/rendez-vous?objet=' + encodeURIComponent(o || ''); } catch (e) {}
     };
   }
 
