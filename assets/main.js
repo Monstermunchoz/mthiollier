@@ -8,6 +8,24 @@
   var hdr = $('.site-header');
   if (hdr) { var onS = function () { hdr.classList.toggle('scrolled', window.scrollY > 8); }; window.addEventListener('scroll', onS, { passive: true }); onS(); }
 
+  /* ---------- Bouton rendez-vous flottant ---------- */
+  var fab = $('#fab');
+  if (fab) {
+    if (/rendez-vous\.html$/.test(location.pathname)) { fab.remove(); }
+    else {
+      document.body.classList.add('has-fab');
+      var hero = $('.hero, .page-head, .art-head');
+      var limit = hero ? hero.offsetTop + hero.offsetHeight - 80 : 400;
+      var ctaBox = $('.cta-box');
+      var onF = function () {
+        var y = window.scrollY, show = y > limit;
+        if (ctaBox) { var r = ctaBox.getBoundingClientRect(); if (r.top < window.innerHeight && r.bottom > 0) show = false; }
+        fab.classList.toggle('show', show);
+      };
+      window.addEventListener('scroll', onF, { passive: true }); window.addEventListener('resize', onF); onF();
+    }
+  }
+
   /* ---------- Menu mobile ---------- */
   var burger = $('#burger'), links = $('#links');
   if (burger && links) {
@@ -66,27 +84,27 @@
         title = 'La fiscalité est votre premier levier.';
         text = 'Avec un impôt significatif, chaque euro déduit ou réduit améliore directement le rendement de votre épargne. Nous commencerons par là.';
         recos.push(['PER individuel', 'Versements déductibles du revenu imposable' + (p === 'liberal' || p === 'dirigeant' ? ', plafond majoré pour les indépendants' : '') + '.']);
-        if (h !== 'court') recos.push(['Immobilier défiscalisant', 'Déficit foncier ou dispositifs ciblés selon votre tranche marginale.']);
-        if (p === 'dirigeant') recos.push(['Arbitrage rémunération', 'Salaire, dividendes et épargne salariale pour alléger la pression globale.']);
+        if (h !== 'court') recos.push(['Investissement immobilier', 'Dispositifs immobiliers adaptés à votre tranche d\u2019imposition.']);
+        if (p === 'dirigeant') recos.push(['Optimisation de la rémunération', 'Arbitrage entre rémunération et dividendes selon votre statut.']);
       } else if (o === 'revenus') {
         title = 'Construire des revenus réguliers sans gestion.';
         text = 'Vous cherchez des compléments de revenus prévisibles. La priorité est un socle immobilier mutualisé, complété par des supports plus souples.';
         recos.push(['SCPI de rendement', 'Revenus trimestriels, diversification immobilière, en direct ou via assurance-vie.']);
         recos.push(['Assurance-vie avec retraits programmés', 'Fiscalité allégée après huit ans, capital disponible.']);
-        if (p === 'retraite') recos.push(['Démembrement et donation', 'Percevoir l’usufruit tout en préparant la transmission.']);
+        if (p === 'retraite') recos.push(['Transmission', 'Préparer la transmission de votre patrimoine dans les meilleures conditions.']);
       } else if (o === 'transmettre') {
         title = 'Transmettre dans les meilleures conditions.';
         text = 'Anticiper la transmission permet souvent de diviser les droits par deux ou plus. Les outils dépendent de votre âge, de vos bénéficiaires et de la nature des actifs.';
         recos.push(['Assurance-vie', 'Transmission hors succession, abattement de 152 500 € par bénéficiaire pour les versements avant 70 ans.']);
-        recos.push(['Donation et démembrement', 'Abattements renouvelables tous les quinze ans, réserve d’usufruit.']);
-        if (p === 'dirigeant') recos.push(['Pacte Dutreil', 'Exonération partielle sur la transmission de l’entreprise.']);
+        recos.push(['Donation', 'Abattements renouvelables tous les quinze ans pour transmettre de votre vivant.']);
+        if (p === 'dirigeant') recos.push(['Statuts et montage juridique', 'Organiser le patrimoine professionnel en vue de sa transmission.']);
       } else {
         title = h === 'court' ? 'Sécuriser d’abord, investir ensuite.' : 'Mettre en place une épargne qui compose dans le temps.';
         text = h === 'court' ? 'Sur moins de trois ans, l’objectif est de préserver le capital tout en préparant la suite.' : 'Votre horizon vous permet d’accepter des variations à court terme pour viser un rendement supérieur sur la durée.';
         if (h === 'court') { recos.push(['Fonds euros et supports monétaires', 'Capital garanti, disponibilité immédiate.']); recos.push(['Épargne programmée', 'Préparer l’investissement de demain sans y renoncer.']); }
-        else { recos.push(['Assurance-vie diversifiée', 'Allocation progressive entre fonds euros, ETF et immobilier.']); recos.push(['SCPI ou premier investissement locatif', 'Se constituer un patrimoine tangible avec l’effet de levier du crédit.']); if (h === 'long') recos.push(['Investissement responsable', 'Fonds labellisés ISR sur un horizon long.']); }
+        else { recos.push(['Assurance-vie', 'Répartition progressive entre fonds euros, unités de compte et SCPI.']); recos.push(['Immobilier et SCPI', 'Se constituer un patrimoine immobilier, en direct ou en SCPI.']); if (h === 'long') recos.push(['Investissement responsable', 'Supports labellisés sur un horizon long.']); }
       }
-      if (ir === 0 && o === 'fisc') { title = 'Peu d’impôt : visons le rendement plutôt que la déduction.'; text = 'Sans impôt à réduire, les dispositifs de défiscalisation perdent leur intérêt. Nous privilégierons la constitution d’un capital.'; recos = [['Assurance-vie diversifiée', 'Le socle de toute stratégie patrimoniale.'], ['Épargne programmée', 'Un versement mensuel adapté à votre budget.']]; }
+      if (ir === 0 && o === 'fisc') { title = 'Peu d’impôt : visons le rendement plutôt que la déduction.'; text = 'Sans impôt à réduire, les dispositifs de défiscalisation perdent leur intérêt. Nous privilégierons la constitution d’un capital.'; recos = [['Assurance-vie', 'Le socle de toute stratégie patrimoniale.'], ['Optimisation de l\u2019épargne', 'Un effort d\u2019épargne régulier adapté à votre budget.']]; }
       t.textContent = title; x.textContent = text; l.innerHTML = '';
       recos.forEach(function (r) {
         var li = document.createElement('li');

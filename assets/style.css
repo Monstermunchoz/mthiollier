@@ -771,3 +771,15 @@ h1 em,h2 em{font-family:inherit;font-style:normal;font-weight:inherit;color:inhe
 .card .btn-link{font-size:.9rem}
 .hero h1{max-width:none;font-size:clamp(2.2rem,3.6vw,3.2rem)}
 .cta-box h2{font-size:clamp(1.6rem,2.6vw,2.2rem)}
+
+/* Bouton « Prendre rendez-vous » flottant */
+.fab{position:fixed;right:24px;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:60;display:inline-flex;align-items:center;gap:10px;padding:16px 22px;border-radius:999px;background:var(--orange);color:var(--orange-ink);font:800 .95rem/1 var(--sans);text-decoration:none;box-shadow:0 14px 30px -10px rgba(232,147,42,.75),0 4px 10px rgba(13,27,42,.12);opacity:0;transform:translateY(16px) scale(.96);pointer-events:none;transition:opacity 220ms var(--ease),transform 220ms var(--ease),background-color 160ms ease}
+.fab .i{width:20px;height:20px}
+.fab.show{opacity:1;transform:none;pointer-events:auto}
+.fab:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.fab:hover{background:#F0A040}}
+@media (max-width:640px){
+  .fab{left:16px;right:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px));justify-content:center;padding:17px 22px;font-size:1rem}
+  body.has-fab .foot{padding-bottom:110px}
+}
+@media (max-width:640px){.nav-cta .btn-primary{display:none}.brand-text{display:grid!important}.brand-text small{display:none}}

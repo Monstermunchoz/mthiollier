@@ -105,7 +105,7 @@ def header(rel, current):
   <div class="wrap nav">
     <a class="brand" href="{rel}index.html" aria-label="{BRAND}, accueil">
       <span class="monogram" aria-hidden="true">MT</span>
-      <span class="brand-text"><b>{BRAND}</b><small>Gestion de patrimoine · Lyon &amp; Ain</small></span>
+      <span class="brand-text"><b>{BRAND}</b><small>Conseil en gestion de patrimoine</small></span>
     </a>
     <ul class="links" id="links">{''.join(items)}</ul>
     <div class="nav-cta">
@@ -123,8 +123,8 @@ def footer(rel):
 <footer class="foot">
   <div class="wrap">
     <div>
-      <a class="brand" href="{rel}index.html"><span class="monogram" aria-hidden="true">MT</span><span class="brand-text"><b>{BRAND}</b><small>Gestion de patrimoine · Lyon &amp; Ain</small></span></a>
-      <p>Cabinet indépendant de conseil en gestion de patrimoine à Miribel, près de Lyon. Conseiller en investissements financiers (CIF) enregistré à l'ORIAS, membre de la CNCEF Patrimoine, association agréée par l'AMF.</p>
+      <a class="brand" href="{rel}index.html"><span class="monogram" aria-hidden="true">MT</span><span class="brand-text"><b>{BRAND}</b><small>Conseil en gestion de patrimoine</small></span></a>
+      <p>Cabinet de conseil en gestion de patrimoine indépendant. Conseiller en investissements financiers (CIF) enregistré à l'ORIAS, membre de la CNCEF Patrimoine, association agréée par l'Autorité des marchés financiers.</p>
     </div>
     <div>
       <h4>Le cabinet</h4>
@@ -144,6 +144,7 @@ def footer(rel):
     </div>
   </div>
 </footer>
+<a class="fab" id="fab" href="{rel}rendez-vous.html" aria-label="Prendre rendez-vous"><i data-i="calendar-check"></i><span>Prendre rendez-vous</span></a>
 <script src="{rel}assets/main.js" defer></script>
 </body>
 </html>
@@ -186,11 +187,11 @@ CTA = """<div class="cta-band s-white">
   <div class="wrap">
     <div class="cta-box">
       <div>
-        <h2>Un premier rendez-vous d'1h30, offert et sans engagement</h2>
-        <p>En visio ou au cabinet de Miribel. Vous repartez avec un bilan écrit de votre situation.</p>
+        <h2>Faisons le point sur votre situation patrimoniale</h2>
+        <p>Premier rendez-vous d'1h30 offert, en visioconférence ou au cabinet. Vous repartez avec une analyse écrite de votre situation.</p>
       </div>
       <div class="actions">
-        <a class="btn btn-dark btn-lg" href="{REL}rendez-vous.html">Réserver mon créneau<i data-i="arrow-right"></i></a>
+        <a class="btn btn-dark btn-lg" href="{REL}rendez-vous.html">Prendre rendez-vous<i data-i="arrow-right"></i></a>
         <a class="btn btn-ghost btn-lg" href="{REL}contact.html">Poser une question</a>
       </div>
     </div>
@@ -290,7 +291,7 @@ for i, a in enumerate(arts):
       <p class="disclaimer">Les informations de cet article sont fournies à titre pédagogique à la date de publication et ne constituent pas un conseil personnalisé. Les placements présentent un risque de perte en capital ; la fiscalité dépend de votre situation et de la législation en vigueur. Seule une étude patrimoniale permet de valider une stratégie.</p>
       <div class="author-box">
         <img src="../assets/mickael-thiollier.webp" alt="Mickaël Thiollier" width="64" height="64" style="width:64px;height:64px;border-radius:50%;object-fit:cover">
-        <div><b>Mickaël Thiollier</b><p>Conseiller en gestion de patrimoine indépendant (CIF, ORIAS, CNCEF) à Miribel, près de Lyon. Dix ans de finance après un parcours en immobilier. Il reçoit en visio ou au cabinet pour un premier entretien offert.</p><p style="margin-top:14px"><a class="btn btn-dark" href="../rendez-vous.html">Prendre rendez-vous<i data-i="arrow-right"></i></a></p></div>
+        <div><b>Mickaël Thiollier</b><p>Conseiller en gestion de patrimoine indépendant (CIF, ORIAS, CNCEF). Dix ans d'expérience en finance après un parcours dans l'immobilier. Il accompagne particuliers, dirigeants et professions libérales en visioconférence ou au cabinet.</p><p style="margin-top:14px"><a class="btn btn-dark" href="../rendez-vous.html">Prendre rendez-vous<i data-i="arrow-right"></i></a></p></div>
       </div>
     </div>
     <aside class="toc" aria-label="Sommaire">
@@ -311,14 +312,14 @@ cards = ""
 for i, a in enumerate(arts):
     cards += f"""<a class="post{' featured' if i == 0 else ''}" href="{a['slug']}.html" data-cat="{a['category']}">{vis(a['slug'], ''.join(w[0] for w in a['keyword'].split()[:2]).upper(), 1400 if i == 0 else 900)}<div class="post-body"><div class="post-meta"><span class="cat">{a['category']}</span><span>{ymd_fr(a['date'])}</span><span>· {a['reading']}</span></div><h3>{a['h1']}</h3><p>{a['excerpt']}</p></div></a>"""
 idx_meta = {"title": "Actualités & conseils gestion de patrimoine | M. Thiollier",
-            "description": "Guides clairs et chiffrés sur le PER, l'assurance-vie, les SCPI, la fiscalité, la retraite et la transmission, rédigés par un conseiller indépendant près de Lyon."}
+            "description": "Décryptages chiffrés sur le PER, l'assurance-vie, les SCPI, la fiscalité, la retraite et la transmission, rédigés par un conseiller en gestion de patrimoine indépendant."}
 ld_idx = [{"@context": "https://schema.org", "@type": "Blog", "name": "Actualités & conseils", "url": SITE + "/actualites/", "publisher": {"@type": "Organization", "name": BRAND},
            "blogPost": [{"@type": "BlogPosting", "headline": a["h1"], "url": f"{SITE}/actualites/{a['slug']}.html", "datePublished": a["date"]} for a in arts]}]
 idx = head(idx_meta, "../", "actualites/index.html", ld_idx) + header("../", "actualites/index.html") + f"""
 <section class="page-head"><div class="wrap">
   <nav class="crumbs" aria-label="Fil d'Ariane"><a href="../index.html">Accueil</a><span>/</span><span>Actualités &amp; conseils</span></nav>
-  <h1>Actualités & conseils</h1>
-  <p class="lede">Des guides longs, sourcés et mis à jour, écrits par le conseiller que vous rencontrerez. Les chiffres 2026, les cas où ça marche et ceux où ça ne marche pas.</p>
+  <h1>Décryptages et conseils patrimoniaux</h1>
+  <p class="lede">Fiscalité, placements, retraite, immobilier, transmission&nbsp;: des analyses sourcées et mises à jour avec les règles en vigueur, pour éclairer vos décisions patrimoniales.</p>
 </div></section>
 <section class="s-white" style="padding-top:clamp(48px,6vw,72px)"><div class="wrap">
   <div class="filters" role="tablist" aria-label="Filtrer par thème">{filters}</div>
