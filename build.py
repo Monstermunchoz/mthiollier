@@ -55,11 +55,15 @@ def meta_block(src):
         src = src[m.end():]
     return meta, src.strip()
 
+import sys as _sys
+_sys.path.insert(0, str(pathlib.Path(__file__).parent / "src"))
+from meta_overrides import META as META_OVR
 def head(meta, rel, path, extra_ld=None):
     url = f"{SITE}/{path}".replace("/index.html", "/")
     ld = [{
-        "@context": "https://schema.org", "@type": "FinancialService", "name": BRAND,
-        "url": SITE + "/", "telephone": "+33643642964", "email": EMAIL,
+        "@context": "https://schema.org", "@type": "FinancialService", "@id": SITE + "/#cabinet", "name": BRAND,
+        "url": SITE + "/", "logo": SITE + "/assets/icon-512.png", "image": SITE + "/assets/og-image.jpg",
+        "description": "Cabinet de conseil en gestion de patrimoine indépendant : épargne, fiscalité, retraite, immobilier, trésorerie d'entreprise et transmission.", "telephone": "+33643642964", "email": EMAIL,
         "address": {"@type": "PostalAddress", "streetAddress": "1000 Grande Rue", "postalCode": "01700", "addressLocality": "Miribel", "addressCountry": "FR"},
         "geo": {"@type": "GeoCoordinates", "latitude": 45.824046, "longitude": 4.952965},
         "areaServed": ["Miribel", "Lyon", "Ain", "Rhône", "Auvergne-Rhône-Alpes"],
@@ -67,26 +71,54 @@ def head(meta, rel, path, extra_ld=None):
         "priceRange": "Premier entretien offert",
         "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5", "reviewCount": "7"}
     }]
+    if path == "index.html":
+        ld.append({"@context": "https://schema.org", "@type": "WebSite", "@id": SITE + "/#site", "name": BRAND, "url": SITE + "/", "inLanguage": "fr-FR", "publisher": {"@id": SITE + "/#cabinet"}})
     if extra_ld: ld += extra_ld
     og_type = meta.get("ogtype", "website")
+    key = path if path.endswith(".html") else path + "index.html"
+    if key in META_OVR:
+        meta = dict(meta); meta["title"], meta["description"] = META_OVR[key]
+    t = html.escape(meta["title"], quote=True); d = html.escape(meta["description"], quote=True)
+    img = meta.get("image") or f"{SITE}/assets/og-image.jpg"
+    img_alt = html.escape(meta.get("image_alt") or f"{BRAND}, conseil en gestion de patrimoine indépendant", quote=True)
+    art = ""
+    if og_type == "article":
+        art = (f'<meta property="article:published_time" content="{meta.get("published","")}T08:00:00+02:00">\n'
+               f'<meta property="article:modified_time" content="{meta.get("published","")}T08:00:00+02:00">\n'
+               f'<meta property="article:author" content="Mickaël Thiollier">\n'
+               f'<meta property="article:section" content="{html.escape(meta.get("section",""))}">\n')
     return f"""<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>{html.escape(meta['title'])}</title>
-<meta name="description" content="{html.escape(meta['description'])}">
+<title>{t}</title>
+<meta name="description" content="{d}">
 <link rel="canonical" href="{url}">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="author" content="Mickaël Thiollier">
+<meta name="theme-color" content="#0E4558">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:type" content="{og_type}">
-<meta property="og:title" content="{html.escape(meta['title'])}">
-<meta property="og:description" content="{html.escape(meta['description'])}">
-<meta property="og:url" content="{url}">
 <meta property="og:site_name" content="{BRAND}">
-<meta property="og:image" content="{SITE}/assets/og-image.svg">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="{rel}assets/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="{t}">
+<meta property="og:description" content="{d}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{img}">
+<meta property="og:image:secure_url" content="{img}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{img_alt}">
+{art}<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{t}">
+<meta name="twitter:description" content="{d}">
+<meta name="twitter:image" content="{img}">
+<meta name="twitter:image:alt" content="{img_alt}">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/assets/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
 <style>{CSS_INLINE}</style>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
@@ -322,9 +354,9 @@ for i, a in enumerate(arts):
     ld = [{
         "@context": "https://schema.org", "@type": "Article", "headline": a["h1"], "description": a["description"],
         "datePublished": a["date"], "dateModified": a["date"], "wordCount": a["words"], "inLanguage": "fr-FR",
-        "mainEntityOfPage": url, "image": photo(a["slug"], 1200) or f"{SITE}/assets/og-image.svg", "articleSection": a["category"],
+        "mainEntityOfPage": url, "image": [f"{SITE}/assets/og/actualites--{a['slug']}.jpg"] + ([photo(a["slug"], 1200)] if photo(a["slug"]) else []), "articleSection": a["category"],
         "author": {"@type": "Person", "name": "Mickaël Thiollier", "jobTitle": "Conseiller en gestion de patrimoine (CIF)", "url": SITE + "/cabinet.html"},
-        "publisher": {"@type": "Organization", "name": BRAND, "url": SITE, "logo": {"@type": "ImageObject", "url": f"{SITE}/assets/favicon.svg"}}
+        "publisher": {"@type": "Organization", "name": BRAND, "url": SITE, "logo": {"@type": "ImageObject", "url": f"{SITE}/assets/icon-512.png", "width": 512, "height": 512}}
     }, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Accueil", "item": SITE + "/"},
         {"@type": "ListItem", "position": 2, "name": "Actualités & conseils", "item": SITE + "/actualites/"},
@@ -338,7 +370,7 @@ for i, a in enumerate(arts):
     related = (same + [o for o in others if o not in same])[:3]
     rel_cards = "".join(f"""<a class="post" href="{o['slug']}.html" data-cat="{o['category']}">{vis(o['slug'], o['category'][:2], alt=o['h1'])}<div class="post-body"><div class="post-meta"><span class="cat">{o['category']}</span><span>{o['reading']}</span></div><h3>{o['h1']}</h3><p>{o['excerpt']}</p></div></a>""" for o in related)
     initials = "".join(w[0] for w in a["keyword"].split()[:2]).upper()
-    page = head({"title": a["title"], "description": a["description"], "ogtype": "article"}, rel, path, ld) + header(rel, "actualites/index.html") + f"""
+    page = head({"title": a["title"], "description": a["description"], "ogtype": "article", "image": f"{SITE}/assets/og/actualites--{a['slug']}.jpg", "image_alt": re.sub("<.*?>", "", a["h1"]), "published": a["date"], "section": a["category"]}, rel, path, ld) + header(rel, "actualites/index.html") + f"""
 <div class="read-progress" aria-hidden="true"><i></i></div>
 <article>
   <div class="art-head">
@@ -499,7 +531,7 @@ for e in EXPERTISES:
   </div>
 </section>
 """ + CTA.replace("{REL}", rel)
-    page = head({"title": e["title"], "description": e["description"]}, rel, path, ld) + header(rel, "expertises.html") + body + "\n" + footer(rel)
+    page = head({"title": e["title"], "description": e["description"], "image": f"{SITE}/assets/og/expertises--{e['slug']}.jpg", "image_alt": f"{e['h1']}, {BRAND}"}, rel, path, ld) + header(rel, "expertises.html") + body + "\n" + footer(rel)
     write(path, page); pages.append((path, "0.8"))
 
 
