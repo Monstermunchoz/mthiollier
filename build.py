@@ -186,8 +186,8 @@ CTA = """<div class="cta-band s-white">
   <div class="wrap">
     <div class="cta-box">
       <div>
-        <h2>Prenons 1h30 pour parler <em>de vos objectifs.</em></h2>
-        <p>En visio ou au cabinet de Miribel. Vous repartez avec un bilan écrit, que vous poursuiviez ou non.</p>
+        <h2>Un premier rendez-vous d'1h30, offert et sans engagement</h2>
+        <p>En visio ou au cabinet de Miribel. Vous repartez avec un bilan écrit de votre situation.</p>
       </div>
       <div class="actions">
         <a class="btn btn-dark btn-lg" href="{REL}rendez-vous.html">Réserver mon créneau<i data-i="arrow-right"></i></a>
@@ -317,7 +317,7 @@ ld_idx = [{"@context": "https://schema.org", "@type": "Blog", "name": "Actualit�
 idx = head(idx_meta, "../", "actualites/index.html", ld_idx) + header("../", "actualites/index.html") + f"""
 <section class="page-head"><div class="wrap">
   <nav class="crumbs" aria-label="Fil d'Ariane"><a href="../index.html">Accueil</a><span>/</span><span>Actualités &amp; conseils</span></nav>
-  <h1>Comprendre <em>avant de placer.</em></h1>
+  <h1>Actualités & conseils</h1>
   <p class="lede">Des guides longs, sourcés et mis à jour, écrits par le conseiller que vous rencontrerez. Les chiffres 2026, les cas où ça marche et ceux où ça ne marche pas.</p>
 </div></section>
 <section class="s-white" style="padding-top:clamp(48px,6vw,72px)"><div class="wrap">
