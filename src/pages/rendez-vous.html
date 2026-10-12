@@ -18,10 +18,9 @@ priority: 0.9
         <li><span class="ico blue"><i data-i="video"></i></span><span><b>En visioconférence ou au cabinet.</b> Selon votre préférence.</span></li>
         <li><span class="ico"><i data-i="star"></i></span><span><b>5,0 sur Google.</b> « Disponible et de très bon conseil. »</span></li>
       </ul>
-      <p class="rdv-direct">Plutôt par téléphone&nbsp;? <a href="tel:+33643642964">06 43 64 29 64</a></p>
     </aside>
 
-    <form class="wizard" id="rdv" data-form="rdv" data-subject="Demande de rendez-vous" novalidate>
+    <form class="wizard" id="rdv" data-form="rdv" data-endpoint="/api/send" data-subject="Demande de rendez-vous" novalidate>
       <div data-body>
         <div class="wz-top">
           <ol class="wz-steps" aria-label="Étapes">
@@ -102,15 +101,13 @@ priority: 0.9
         <p class="lede" style="font-size:1rem">Pour aller plus vite, fixez l'horaire exact dans mon agenda. Sinon, je vous propose deux créneaux par téléphone.</p>
         <div class="recap" data-recap></div>
         <a class="btn btn-primary" href="https://calendly.com/m-thiollierconseils/prise-de-contact" target="_blank" rel="noopener">Fixer l'horaire maintenant<i data-i="arrow-right"></i></a>
-        <span data-warn hidden style="font-size:.86rem;color:var(--ink-2)">L'envoi automatique n'est pas encore activé sur ce site&nbsp;: cliquez ci-dessous pour m'envoyer votre demande par e-mail, le message est pré-rempli.</span>
-        <a data-mailto class="btn btn-ghost" href="#" hidden>Envoyer ma demande par e-mail</a>
         <p class="muted">À préparer si vous les avez&nbsp;: vos deux derniers avis d'imposition et vos relevés d'épargne et de crédits.</p>
       </div>
     </form>
   </div>
 </div>
 
-<section class="s-white" style="padding-top:0">
+<section class="s-white">
   <div class="wrap faq">
     <div class="sec-head tight">
       

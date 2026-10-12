@@ -122,7 +122,7 @@ faq: 1
       <div class="me-card"><img src="assets/mickael-thiollier.webp" alt="Mickaël Thiollier" width="56" height="56"><div><b>« Je cherche des gens qui auront encore les mêmes clients dans dix ans. »</b><span>Mickaël Thiollier, fondateur</span></div></div>
       <p class="muted">Candidature confidentielle. Si vous êtes en poste, les échanges se font en dehors de vos horaires.</p>
     </div>
-    <form class="card" id="rec-form" data-form="candidature" data-subject="Candidature conseiller" novalidate>
+    <form class="card" id="rec-form" data-form="candidature" data-endpoint="/api/send" data-subject="Candidature conseiller" novalidate>
       <div data-body>
         <div class="f2">
           <label class="float-field" for="k-nom"><input id="k-nom" name="nom" type="text" autocomplete="name" required data-validate="nom" placeholder=" "><span>Nom et prénom</span><em class="err" aria-live="polite"></em></label>
@@ -150,8 +150,6 @@ faq: 1
       <div class="sent" id="candidature-done" hidden>
         <b>Candidature reçue.</b><span>Je vous rappelle sous 48h pour un premier échange de 20 minutes.</span>
         <div data-recap style="font-size:.9rem;display:grid;gap:4px;margin-top:6px"></div>
-        <span data-warn hidden style="font-size:.86rem">L'envoi automatique n'est pas encore activé sur ce site&nbsp;: cliquez ci-dessous pour envoyer votre candidature par e-mail, le message est pré-rempli.</span>
-        <a data-mailto class="btn btn-ghost" href="#" hidden style="justify-self:start;margin-top:8px">Envoyer par e-mail</a>
       </div>
     </form>
   </div>

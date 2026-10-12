@@ -125,8 +125,7 @@
   });
 
   /* ---------- Formulaires (contact, rendez-vous, candidature) ----------
-     Envoi : si l'attribut data-endpoint est renseigné (Formspree, Netlify, Web3Forms, votre API…),
-     les champs sont POSTés en JSON. Sinon, un lien e-mail pré-rempli est proposé. */
+     Envoi : les champs sont POSTés en JSON vers /api/send (fonction Vercel, SMTP). */
   var validators = {
     nom: function (v) { return v.trim().length >= 2 || 'Indiquez votre nom.'; },
     tel: function (v) { return /^(\+33|0)\s?[1-9]([\s.-]?\d{2}){4}$/.test(v.trim()) || 'Numéro français attendu, ex. 06 12 34 56 78.'; },
@@ -166,7 +165,11 @@
       var btn = $('[type=submit]', form); btn.disabled = true; var old = btn.textContent; btn.textContent = 'Envoi…';
       var data = {}; new FormData(form).forEach(function (v, k) { if (k === 'website') return; data[k] = data[k] ? data[k] + ', ' + v : v; });
       data._page = location.pathname; data._date = new Date().toISOString();
-      var finish = function (sentOk) {
+      data._subject = form.dataset.subject || 'Demande via le site';
+      var fail = $('.form-fail', form);
+      if (!fail) { fail = document.createElement('p'); fail.className = 'form-fail'; fail.setAttribute('role', 'alert'); btn.parentNode.insertBefore(fail, btn.nextSibling); }
+      fail.textContent = '';
+      var finish = function () {
         var done = $('[data-done]', form) || $('#' + form.dataset.form + '-done');
         var body = $('[data-body]', form);
         if (body) body.hidden = true;
@@ -174,23 +177,17 @@
           done.hidden = false;
           var recap = $('[data-recap]', done);
           if (recap) { recap.innerHTML = ''; ['nom', 'tel', 'email', 'objet', 'creneau'].forEach(function (k) { if (data[k]) { var p = document.createElement('div'); var b = document.createElement('b'); b.textContent = ({ nom: 'Nom', tel: 'Téléphone', email: 'E-mail', objet: 'Objet', creneau: 'Créneau' })[k] + ' : '; p.appendChild(b); p.appendChild(document.createTextNode(data[k])); recap.appendChild(p); } }); }
-          var ml = $('[data-mailto]', done);
-          if (ml) {
-            var subject = encodeURIComponent((form.dataset.subject || 'Demande via le site') + (data.nom ? ' – ' + data.nom : ''));
-            var lines = Object.keys(data).filter(function (k) { return k[0] !== '_'; }).map(function (k) { return k + ' : ' + data[k]; }).join('\n');
-            ml.href = 'mailto:' + mailto + '?subject=' + subject + '&body=' + encodeURIComponent(lines);
-            ml.hidden = sentOk;
-          }
-          var warn = $('[data-warn]', done); if (warn) warn.hidden = sentOk;
           done.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         try { localStorage.removeItem(key); } catch (e) {}
-        btn.textContent = old;
+        btn.textContent = old; btn.disabled = false;
       };
-      if (endpoint) {
-        fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) })
-          .then(function (r) { finish(r.ok); }).catch(function () { finish(false); });
-      } else finish(false);
+      var failed = function () {
+        btn.textContent = old; btn.disabled = false;
+        fail.textContent = "L'envoi n'a pas abouti. Réessayez dans un instant ou écrivez à " + mailto + '.';
+      };
+      fetch(endpoint || '/api/send', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) })
+        .then(function (r) { if (r.ok) finish(); else failed(); }).catch(failed);
     });
   });
 
@@ -246,4 +243,12 @@
       });
     });
   }
+})();
+
+/* Barre de progression de lecture (articles) */
+(function () {
+  var bar = document.querySelector('.read-progress i'); if (!bar) return;
+  var art = document.querySelector('.art-body'); var raf = 0;
+  var upd = function () { raf = 0; var r = art.getBoundingClientRect(); var p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight))); bar.style.transform = 'scaleX(' + p + ')'; };
+  addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(upd); }, { passive: true }); upd();
 })();

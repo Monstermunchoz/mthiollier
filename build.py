@@ -23,7 +23,7 @@ NAV = [("expertises.html", "Expertises"), ("cabinet.html", "Le cabinet"), ("actu
        ("recrutement.html", "Recrutement"), ("contact.html", "Contact")]
 
 
-U = "https://images.unsplash.com/photo-{}?auto=format&fit=crop&w={}&q=72"
+U = "https://images.unsplash.com/photo-{}?auto=format&fit=crop&w={}&q=65"
 PHOTOS = {
     "per-plan-epargne-retraite-guide-2026": "1782994978963-ad86f1eea34c",
     "preparer-sa-retraite-a-40-ans": "1774354669545-6265156237d4",
@@ -63,7 +63,7 @@ def head(meta, rel, path, extra_ld=None):
         "geo": {"@type": "GeoCoordinates", "latitude": 45.824046, "longitude": 4.952965},
         "areaServed": ["Miribel", "Lyon", "Ain", "Rhône", "Auvergne-Rhône-Alpes"],
         "founder": {"@type": "Person", "name": "Mickaël Thiollier", "jobTitle": "Conseiller en gestion de patrimoine", "image": SITE + "/assets/mickael-thiollier.webp"},
-        "openingHours": "Mo-Fr 09:00-19:00", "priceRange": "Premier entretien offert",
+        "priceRange": "Premier entretien offert",
         "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5", "reviewCount": "7"}
     }]
     if extra_ld: ld += extra_ld
@@ -109,7 +109,6 @@ def header(rel, current):
     </a>
     <ul class="links" id="links">{''.join(items)}</ul>
     <div class="nav-cta">
-      <a class="btn btn-ghost" href="tel:+33643642964"><i data-i="phone"></i>06 43 64 29 64</a>
       <a class="btn btn-primary" href="{rel}rendez-vous.html">Prendre rendez-vous</a>
       <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="links"><i data-i="menu"></i></button>
     </div>
@@ -203,6 +202,29 @@ def card(o, featured=False, w=900):
     return (f'<a class="post{" featured" if featured else ""}" href="{{REL}}actualites/{o["slug"]}.html" data-cat="{o["category"]}">'
             f'{vis(o["slug"], lab, w)}<div class="post-body"><div class="post-meta"><span class="cat">{o["category"]}</span>'
             f'<span>{o["reading"]} de lecture</span></div><h3>{o["h1"]}</h3><p>{o["excerpt"]}</p></div></a>')
+
+KEYS = {
+ "assurance-vie-fiscalite-apres-8-ans": ["Tant que vous ne retirez rien, l'assurance-vie ne génère aucun impôt sur le revenu.", "Après 8 ans, un couple peut retirer chaque année jusqu'à 9&nbsp;200&nbsp;€ de gains sans impôt sur le revenu.", "Pour la transmission, chaque bénéficiaire profite d'un abattement de 152&nbsp;500&nbsp;€ sur les primes versées avant 70 ans."],
+ "conseiller-gestion-patrimoine-independant-ou-banque": ["Un conseiller sérieux est immatriculé à l'ORIAS et membre d'une association agréée (CIF).", "Indépendant ne veut pas dire gratuit&nbsp;: la rémunération doit être écrite et compréhensible.", "La banque suffit pour des besoins simples&nbsp;; une stratégie globale demande une architecture ouverte."],
+ "investir-en-scpi-guide-complet": ["Une SCPI permet d'investir dans l'immobilier d'entreprise sans gestion, à partir de quelques centaines d'euros.", "Le bon rendement est le rendement net d'impôt dans votre situation, pas le taux affiché.", "Le principal risque est la liquidité&nbsp;: une SCPI s'envisage sur 8 à 10 ans minimum."],
+ "investissement-responsable-isr-labels": ["Trois labels, trois promesses&nbsp;: ISR, Greenfin et Finansol.", "Le label ISR a été durci en 2024&nbsp;: vérifiez la date de labellisation du fonds.", "Un placement responsable s'intègre facilement dans une assurance-vie ou un PER."],
+ "lmnp-location-meublee-2026": ["Au régime réel, l'amortissement neutralise l'essentiel de l'impôt sur les loyers.", "La réforme de 2025 alourdit la plus-value en cas de revente, pas la fiscalité des loyers.", "Pour une détention de 15 ans et plus, le LMNP reste l'un des régimes locatifs les plus efficaces."],
+ "per-plan-epargne-retraite-guide-2026": ["Les versements sont déductibles de votre revenu imposable, dans la limite d'un plafond reportable.", "Le PER reporte l'impôt, il ne l'efface pas&nbsp;: il est gagnant si votre taux d'imposition baisse à la retraite.", "L'épargne est bloquée jusqu'à la retraite, sauf cas de déblocage anticipé comme l'achat de la résidence principale."],
+ "placer-tresorerie-entreprise": ["Commencez par isoler la trésorerie réellement excédentaire de celle utile à l'exploitation.", "Compte à terme pour le court terme, contrat de capitalisation pour le long terme.", "L'usufruit temporaire de SCPI est un outil réservé aux sociétés, fiscalement très efficace."],
+ "preparer-sa-retraite-a-40-ans": ["À 40 ans, vous avez encore 20 à 25 ans d'effort d'épargne devant vous&nbsp;: le temps travaille pour vous.", "Chiffrez d'abord votre taux de remplacement, puis le manque mensuel à combler.", "Automatisez un versement réparti entre PER, assurance-vie et immobilier, et ajustez tous les deux ans."],
+ "reduire-ses-impots-7-leviers-legaux": ["Réduction, déduction et crédit d'impôt n'ont pas le même effet sur votre impôt.", "Priorité aux leviers sans risque&nbsp;: emploi à domicile, dons et, dès 30&nbsp;% d'imposition, le PER.", "Immobilier (déficit foncier, Denormandie, LMNP) et FIP/FCPI viennent ensuite, selon votre profil."],
+ "transmettre-son-patrimoine-donation-demembrement": ["Chaque parent peut donner 100&nbsp;000&nbsp;€ à chaque enfant sans droits, abattement renouvelable tous les 15 ans.", "Le démembrement permet de transmettre plus pour une valeur fiscale moindre, surtout si l'on donne tôt.", "L'assurance-vie offre un circuit de transmission parallèle, hors succession."],
+}
+
+# ---------- Logos partenaires (défilement) ----------
+FIN = [("swiss-life","Swiss Life"),("arkea","Arkéa"),("corum","Corum"),("perial-asset-management","Perial Asset Management"),("norma-capital","Norma Capital"),("eiffel-investment-group","Eiffel Investment Group"),("altaroc","Altaroc"),("eres","Eres"),("inter-invest","Inter Invest"),("inter-gestion","Inter Gestion"),("horizon-asset-management","Horizon AM"),("kyaneos","Kyaneos"),("m-capital","M Capital"),("alderian","Alderian"),("fiducial","Fiducial"),("selencia","Selencia"),("sodify","Sodify"),("digital-insure","Digital Insure"),("crequy","Crequy"),("u-wine","U'Wine"),("3-colonnes-economie-solidaire","3 Colonnes"),("prestige-immobilier","Prestige Immobilier")]
+IMMO = [("vinci","Vinci Immobilier"),("perl","Perl"),("urbat","Urbat"),("groupe-edouard-denis","Groupe Edouard Denis"),("saint-agne-groupe-immobilier","Saint-Agne"),("lp-promotion","LP Promotion"),("green-city-immobilier","Green City Immobilier"),("groupe-cailleau","Groupe Cailleau"),("groupe-cir","Groupe CIR"),("cbo-territoria","CBo Territoria"),("colonies","Colonies"),("colocatere-location-autrement","Colocatère"),("confiance-groupe-immobilier","Confiance Immobilier"),("group-flot-immobilier","Flot Immobilier"),("loftwood","Loftwood"),("village-or-residences-seniors","Village d'Or")]
+def marquee(items, rel="", reverse=False, label="Nos partenaires"):
+    def li(hidden):
+        return "".join(f'<li><img src="{rel}assets/partenaires/{f}.webp" alt="{"" if hidden else n}" decoding="async" height="52"></li>' for f, n in items)
+    return (f'<div class="marquee{" rev" if reverse else ""}" role="region" aria-label="{label}">'
+            f'<ul class="mq-track"><li class="mq-group"><ul>{li(False)}</ul></li><li class="mq-group" aria-hidden="true"><ul>{li(True)}</ul></li></ul></div>')
+
 LATEST = '<div class="posts">' + "".join(card(o) for o in arts[:3]) + '</div>'
 
 # ---------- Pages ----------
@@ -227,7 +249,7 @@ for f in sorted((ROOT / "src/pages").glob("*.html")):
             "applicantLocationRequirements": {"@type": "Country", "name": "France"},
             "jobLocationType": "TELECOMMUTE", "directApply": True
         }]
-    body = body.replace("<!--LATEST-->", LATEST.replace("{REL}", "")).replace("<!--CTA-->", CTA.replace("{REL}", ""))
+    body = body.replace("<!--MQ-ALL-->", marquee(FIN[:11]+IMMO[:4]+FIN[11:]+IMMO[4:])).replace("<!--MQ-FIN-->", marquee(FIN, label="Partenaires financiers")).replace("<!--MQ-IMMO-->", marquee(IMMO, reverse=True, label="Partenaires immobiliers")).replace("<!--LATEST-->", LATEST.replace("{REL}", "")).replace("<!--CTA-->", CTA.replace("{REL}", ""))
     out = head(meta, rel, name, extra) + header(rel, name) + body + "\n" + footer(rel)
     write(name, out); pages.append((name, meta.get("priority", "0.7")))
 
@@ -249,6 +271,8 @@ for i, a in enumerate(arts):
     lede = re.search(r'<p class="lede">(.*?)</p>', body, re.S)
     lede_html = lede.group(1) if lede else ""
     body = re.sub(r'<p class="lede">.*?</p>\s*', "", body, count=1, flags=re.S)
+    keys = KEYS.get(a["slug"], [])
+    ess = ('<div class="essentiel"><b>L\'essentiel en 30 secondes</b><ul>' + "".join(f"<li>{k}</li>" for k in keys) + '</ul></div>') if keys else ""
     faqs = re.findall(r"<summary>(.*?)</summary>\s*<p>(.*?)</p>", body, re.S)
     ld = [{
         "@context": "https://schema.org", "@type": "Article", "headline": a["h1"], "description": a["description"],
@@ -270,6 +294,7 @@ for i, a in enumerate(arts):
     rel_cards = "".join(f"""<a class="post" href="{o['slug']}.html" data-cat="{o['category']}">{vis(o['slug'], o['category'][:2])}<div class="post-body"><div class="post-meta"><span class="cat">{o['category']}</span><span>{o['reading']}</span></div><h3>{o['h1']}</h3><p>{o['excerpt']}</p></div></a>""" for o in related)
     initials = "".join(w[0] for w in a["keyword"].split()[:2]).upper()
     page = head({"title": a["title"], "description": a["description"], "ogtype": "article"}, rel, path, ld) + header(rel, "actualites/index.html") + f"""
+<div class="read-progress" aria-hidden="true"><i></i></div>
 <article>
   <div class="art-head">
     <div class="wrap">
@@ -284,9 +309,10 @@ for i, a in enumerate(arts):
       </div>
     </div>
   </div>
-  <div class="art-vis"><div role="img" aria-label="Illustration : {a['keyword']}" style="position:relative">{('<img src="' + photo(a['slug'], 1600) + '" alt="" fetchpriority="high" decoding="async" onload="this.parentNode.classList.add(&#39;has-photo&#39;)" onerror="this.remove()">') if photo(a['slug']) else ''}<span>{initials}</span></div></div>
+  <div class="art-vis"><div role="img" aria-label="Illustration : {a['keyword']}" style="position:relative">{('<img src="' + photo(a['slug'], 1200) + '" alt="" fetchpriority="high" decoding="async" onload="this.parentNode.classList.add(&#39;has-photo&#39;)" onerror="this.remove()">') if photo(a['slug']) else ''}<span>{initials}</span></div></div>
   <div class="art-layout">
     <div class="art-body">
+{ess}
 {body}
       <p class="disclaimer">Les informations de cet article sont fournies à titre pédagogique à la date de publication et ne constituent pas un conseil personnalisé. Les placements présentent un risque de perte en capital ; la fiscalité dépend de votre situation et de la législation en vigueur. Seule une étude patrimoniale permet de valider une stratégie.</p>
       <div class="author-box">

@@ -1,0 +1,7 @@
+{
+  "name": "mthiollier-conseils",
+  "private": true,
+  "description": "Site statique M. Thiollier Conseils + fonction d'envoi des formulaires (SMTP)",
+  "engines": { "node": ">=18" },
+  "dependencies": { "nodemailer": "^6.9.14" }
+}

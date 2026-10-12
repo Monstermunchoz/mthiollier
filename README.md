@@ -30,3 +30,14 @@ Chaque page : title (< 60 car.), meta description, canonical, Open Graph, JSON-L
 
 ## Photos
 Les photos d'articles et les bandeaux viennent d'Unsplash (licence gratuite, photos non « Unsplash+ »), chargées depuis leur CDN. Les identifiants sont dans `PHOTOS` en haut de `build.py`. Si une photo ne charge pas, un visuel de couleur prend le relais.
+
+## Envoi des formulaires (SMTP)
+
+Les formulaires (rendez-vous, contact, candidature) envoient leurs données à `/api/send` (fonction Vercel, `api/send.js`).
+Dans Vercel > Settings > Environment Variables, renseigner :
+
+- `SMTP_HOST`, `SMTP_PORT` (465 ou 587), `SMTP_USER`, `SMTP_PASS`
+- `MAIL_TO` : la boîte qui reçoit les demandes (ex. mickael@mthiollierconseils.fr)
+- `MAIL_FROM` (optionnel)
+
+Puis redéployer. Tant que ces variables sont absentes, le formulaire affiche un message d'erreur au lieu de confirmer l'envoi.

@@ -16,14 +16,12 @@ faq: 1
   <div class="wrap contact">
     <div class="coord">
       <dl>
-        <div><dt><span class="ico white"><i data-i="phone"></i></span></dt><dd><small>Téléphone</small><a href="tel:+33643642964">06 43 64 29 64</a><button class="copy" type="button" data-copy="0643642964">Copier</button></dd></div>
         <div><dt><span class="ico white"><i data-i="mail"></i></span></dt><dd><small>E-mail</small><a href="mailto:mickael@mthiollierconseils.fr">mickael@mthiollierconseils.fr</a><button class="copy" type="button" data-copy="mickael@mthiollierconseils.fr">Copier</button></dd></div>
         <div><dt><span class="ico white"><i data-i="map-pin"></i></span></dt><dd><small>Cabinet</small>1000 Grande Rue, 01700 Miribel<a class="copy" href="https://www.google.com/maps/search/?api=1&query=1000+Grande+Rue+01700+Miribel" target="_blank" rel="noopener">Itinéraire</a></dd></div>
-        <div><dt><span class="ico white"><i data-i="clock"></i></span></dt><dd><small>Horaires</small>Lun. au ven., 9h à 19h · samedi matin sur demande</dd></div>
       </dl>
       <div class="me-card"><img src="assets/mickael-thiollier.webp" alt="Mickaël Thiollier" width="56" height="56"><div><b>Mickaël Thiollier</b><span>C'est moi qui lis et réponds à vos messages.</span></div></div>
     </div>
-    <form class="card" id="contact-form" data-form="contact" data-subject="Message via le site" novalidate>
+    <form class="card" id="contact-form" data-form="contact" data-endpoint="/api/send" data-subject="Message via le site" novalidate>
       <div data-body>
         <h2 style="font-size:1.6rem">Envoyer un message</h2>
         <div class="f2">
@@ -51,8 +49,6 @@ faq: 1
       </div>
       <div class="sent" id="contact-done" hidden>
         <b>Message reçu.</b><span>Je vous réponds sous 24h ouvrées. Pour aller plus vite, vous pouvez déjà <a href="rendez-vous.html">réserver un créneau</a>.</span>
-        <span data-warn hidden style="font-size:.86rem">Si l'envoi automatique n'est pas encore activé, cliquez ci-dessous : votre messagerie s'ouvrira avec le message pré-rempli.</span>
-        <a data-mailto class="btn btn-ghost" href="#" hidden style="justify-self:start;margin-top:8px">Envoyer par e-mail</a>
       </div>
     </form>
   </div>
