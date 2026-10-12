@@ -127,7 +127,7 @@ def footer(rel):
     </div>
     <div>
       <h4>Le cabinet</h4>
-      <ul><li><a href="{rel}expertises.html">Expertises</a></li><li><a href="{rel}cabinet.html">Qui suis-je</a></li><li><a href="{rel}simulateur.html">Simulateur</a></li><li><a href="{rel}recrutement.html">Recrutement</a></li></ul>
+      <ul><li><a href="{rel}expertises.html">Expertises</a></li><li><a href="{rel}expertises/assurance-vie.html">Assurance-vie</a></li><li><a href="{rel}expertises/plan-epargne-retraite.html">Plan d'épargne retraite</a></li><li><a href="{rel}expertises/accompagnement-dirigeants.html">Dirigeants</a></li><li><a href="{rel}cabinet.html">Qui suis-je</a></li><li><a href="{rel}simulateur.html">Simulateur</a></li><li><a href="{rel}recrutement.html">Recrutement</a></li></ul>
     </div>
     <div>
       <h4>Ressources</h4>
@@ -353,6 +353,109 @@ idx = head(idx_meta, "../", "actualites/index.html", ld_idx) + header("../", "ac
 </div></section>
 """ + CTA.replace("{REL}", "../") + footer("../")
 write("actualites/index.html", idx)
+
+# ---------- Pages expertises (une page par expertise) ----------
+import importlib.util as _ilu
+_spec = _ilu.spec_from_file_location("expdata", ROOT / "src/expertises_data.py"); _m = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_m)
+EXPERTISES = _m.EXPERTISES
+EXP = {e["slug"]: e for e in EXPERTISES}
+ART = {a["slug"]: a for a in arts}
+
+def exp_card(e, rel, i=0):
+    blue = " blue" if i % 2 else ""
+    return (f'<a class="card" href="{rel}expertises/{e["slug"]}.html"><span class="ico{blue}"><i data-i="{e["icon"]}"></i></span>'
+            f'<h3>{e["name"]}</h3><p>{e["card"]}</p><span class="btn-link">Découvrir l\'expertise<i data-i="arrow-right"></i></span></a>')
+
+for e in EXPERTISES:
+    rel = "../"; path = f"expertises/{e['slug']}.html"; url = f"{SITE}/{path}"
+    # Articles liés : l'article principal, puis ceux des expertises voisines
+    slugs = [e["article"]] + [EXP[r]["article"] for r in e["related"] if r in EXP]
+    seen = []
+    for sl in slugs:
+        if sl in ART and sl not in seen: seen.append(sl)
+    for a in arts:
+        if len(seen) >= 3: break
+        if a["slug"] not in seen: seen.append(a["slug"])
+    posts = '<div class="posts">' + "".join(card(ART[sl]) for sl in seen[:3]).replace("{REL}", rel) + "</div>"
+    enjeux = "".join(f'<div class="card"><span class="ico{" blue" if i % 2 else ""}"><i data-i="{ic}"></i></span><h3>{t}</h3><p>{d}</p></div>' for i, (ic, t, d) in enumerate(e["enjeux"]))
+    steps = "".join(f'<div class="step"><span class="step-n">Étape {i+1}</span><h3>{t}</h3><p>{d}</p></div>' for i, (t, d) in enumerate(e["approche"]))
+    sols = "".join(f'<div class="sol"><span class="ico{" blue" if i % 2 else ""}"><i data-i="circle-check"></i></span><div><h3>{t}</h3><p>{d}</p></div></div>' for i, (t, d) in enumerate(e["solutions"]))
+    pq = "".join(f'<li><span class="ico white"><i data-i="{ic}"></i></span><span>{t}</span></li>' for ic, t in zip(["user-round", "users", "target"], e["pourqui"]))
+    faq = "".join(f'<details{" open" if i == 0 else ""}><summary>{q}</summary><p>{a}</p></details>' for i, (q, a) in enumerate(e["faq"]))
+    others = "".join(exp_card(EXP[r], rel, i) for i, r in enumerate(e["related"]) if r in EXP)
+    ld = [{"@context": "https://schema.org", "@type": "Service", "name": e["h1"], "description": e["description"], "url": url,
+           "serviceType": "Conseil en gestion de patrimoine", "areaServed": "FR",
+           "provider": {"@type": "FinancialService", "name": BRAND, "url": SITE + "/"}},
+          {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Accueil", "item": SITE + "/"},
+              {"@type": "ListItem", "position": 2, "name": "Expertises", "item": SITE + "/expertises.html"},
+              {"@type": "ListItem", "position": 3, "name": e["name"], "item": url}]},
+          {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+              {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in e["faq"]]}]
+    body = f"""
+<section class="page-head exp-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Fil d'Ariane"><a href="../index.html">Accueil</a><span>/</span><a href="../expertises.html">Expertises</a><span>/</span><span>{e['name']}</span></nav>
+    <span class="exp-ico ico"><i data-i="{e['icon']}"></i></span>
+    <h1>{e['h1']}</h1>
+    <p class="lede">{e['lede']}</p>
+    <div class="hero-actions"><a class="btn btn-primary btn-lg" href="../rendez-vous.html">Demander un bilan offert<i data-i="arrow-right"></i></a><a class="btn btn-ghost btn-lg" href="#articles">Lire nos guides</a></div>
+  </div>
+</section>
+
+<section class="s-white">
+  <div class="wrap">
+    <div class="sec-head center"><h2>Les enjeux</h2><p class="lede">Ce qui fait la différence entre une décision prise au hasard et une stratégie qui tient dans la durée.</p></div>
+    <div class="cards cards-3">{enjeux}</div>
+  </div>
+</section>
+
+<section class="s-navy exp-pq">
+  <div class="wrap">
+    <div class="sec-head center"><h2>Pour qui&nbsp;?</h2></div>
+    <ul class="pq">{pq}</ul>
+  </div>
+</section>
+
+<section class="s-soft">
+  <div class="wrap">
+    <div class="sec-head center"><h2>Notre accompagnement</h2><p class="lede">Une démarche en quatre étapes, formalisée par écrit, pour décider en toute connaissance de cause.</p></div>
+    <div class="steps four">{steps}</div>
+  </div>
+</section>
+
+<section class="s-white">
+  <div class="wrap">
+    <div class="sec-head center"><h2>Les solutions mobilisées</h2><p class="lede">Sélectionnées parmi près de 40 partenaires, comparées sur leurs frais, leur qualité de gestion et leur solidité.</p></div>
+    <div class="sols">{sols}</div>
+  </div>
+</section>
+
+<section class="s-soft" id="faq">
+  <div class="wrap faq">
+    <div class="sec-head tight"><h2>Questions fréquentes</h2><p class="lede">{e['name']}&nbsp;: les réponses aux questions que l'on me pose le plus souvent.</p></div>
+    <div class="faq-list">{faq}</div>
+  </div>
+</section>
+
+<section class="s-white" id="articles">
+  <div class="wrap">
+    <div class="sec-head center"><h2>Pour aller plus loin</h2><p class="lede">Nos guides pour approfondir le sujet avant notre premier échange.</p></div>
+    {posts}
+    <p style="margin-top:40px;text-align:center"><a class="btn btn-ghost" href="../actualites/index.html">Tous les articles<i data-i="arrow-right"></i></a></p>
+  </div>
+</section>
+
+<section class="s-soft">
+  <div class="wrap">
+    <div class="sec-head center"><h2>Expertises associées</h2></div>
+    <div class="cards cards-3">{others}</div>
+  </div>
+</section>
+""" + CTA.replace("{REL}", rel)
+    page = head({"title": e["title"], "description": e["description"]}, rel, path, ld) + header(rel, "expertises.html") + body + "\n" + footer(rel)
+    write(path, page); pages.append((path, "0.8"))
+
 
 # ---------- Sitemap & robots ----------
 urls = [("", "1.0", "weekly")] + [(p, pr, "monthly") for p, pr in pages if p != "index.html"] + [("actualites/", "0.8", "weekly")] + [(f"actualites/{a['slug']}.html", "0.7", "monthly") for a in arts]
