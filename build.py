@@ -39,9 +39,10 @@ PHOTOS = {
 def photo(slug, w=1200):
     pid = PHOTOS.get(slug)
     return U.format(pid, w) if pid else ""
-def vis(slug, label, w=900, cls="post-vis"):
+def vis(slug, label, w=900, cls="post-vis", alt=""):
+    alt = html.escape(re.sub(r"<.*?>", "", alt).replace("&nbsp;", " "), quote=True) if alt else f"Illustration {label}"
     src = photo(slug, w)
-    img = f'<img src="{src}" alt="" loading="lazy" decoding="async" onload="this.parentNode.classList.add(\'has-photo\')" onerror="this.remove()">' if src else ""
+    img = f'<img src="{src}" alt="{alt}" loading="lazy" decoding="async" onload="this.parentNode.classList.add(\'has-photo\')" onerror="this.remove()">' if src else ""
     return f'<div class="{cls}" aria-hidden="true">{img}<span>{label}</span></div>'
 
 def meta_block(src):
@@ -89,7 +90,7 @@ def head(meta, rel, path, extra_ld=None):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@1&display=swap">
-<link rel="stylesheet" href="{rel}assets/style.css">
+<link rel="stylesheet" href="{rel}assets/style.min.css?v={VER}">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 </head>
 <body>
@@ -144,7 +145,7 @@ def footer(rel):
   </div>
 </footer>
 <a class="fab" id="fab" href="{rel}rendez-vous.html" aria-label="Prendre rendez-vous"><i data-i="calendar-check"></i><span>Prendre rendez-vous</span></a>
-<script src="{rel}assets/main.js" defer></script>
+<script src="{rel}assets/main.min.js?v={VER}" defer></script>
 </body>
 </html>
 """
@@ -198,6 +199,13 @@ def absolutize(path, html_text):
     html_text = re.sub(re.escape(SITE) + r'(/[^"\s<>]*?\.html)', lambda m: SITE + clean(m.group(1)), html_text)
     return html_text
 
+import rcssmin, rjsmin, hashlib
+_css = rcssmin.cssmin((ROOT / "assets/style.css").read_text(encoding="utf-8"))
+_js = rjsmin.jsmin((ROOT / "assets/main.js").read_text(encoding="utf-8"))
+(ROOT / "assets/style.min.css").write_text(_css, encoding="utf-8")
+(ROOT / "assets/main.min.js").write_text(_js, encoding="utf-8")
+VER = hashlib.md5((_css + _js).encode()).hexdigest()[:8]
+
 def write(path, content):
     p = ROOT / path; p.parent.mkdir(parents=True, exist_ok=True)
     if path.endswith(".html"): content = absolutize(path, content)
@@ -235,7 +243,7 @@ CTA = """<div class="cta-band s-white">
 def card(o, featured=False, w=900):
     lab = "".join(x[0] for x in o["keyword"].split()[:2]).upper()
     return (f'<a class="post{" featured" if featured else ""}" href="{{REL}}actualites/{o["slug"]}.html" data-cat="{o["category"]}">'
-            f'{vis(o["slug"], lab, w)}<div class="post-body"><div class="post-meta"><span class="cat">{o["category"]}</span>'
+            f'{vis(o["slug"], lab, w, alt=o["h1"])}<div class="post-body"><div class="post-meta"><span class="cat">{o["category"]}</span>'
             f'<span>{o["reading"]} de lecture</span></div><h3>{o["h1"]}</h3><p>{o["excerpt"]}</p></div></a>')
 
 KEYS = {
@@ -256,7 +264,7 @@ FIN = [("swiss-life","Swiss Life"),("arkea","Arkéa"),("corum","Corum"),("perial
 IMMO = [("vinci","Vinci Immobilier"),("perl","Perl"),("urbat","Urbat"),("groupe-edouard-denis","Groupe Edouard Denis"),("saint-agne-groupe-immobilier","Saint-Agne"),("lp-promotion","LP Promotion"),("green-city-immobilier","Green City Immobilier"),("groupe-cailleau","Groupe Cailleau"),("groupe-cir","Groupe CIR"),("cbo-territoria","CBo Territoria"),("colonies","Colonies"),("colocatere-location-autrement","Colocatère"),("confiance-groupe-immobilier","Confiance Immobilier"),("group-flot-immobilier","Flot Immobilier"),("loftwood","Loftwood"),("village-or-residences-seniors","Village d'Or")]
 def marquee(items, rel="", reverse=False, label="Nos partenaires"):
     def li(hidden):
-        return "".join(f'<li><img src="{rel}assets/partenaires/{f}.webp" alt="{"" if hidden else n}" decoding="async" height="52"></li>' for f, n in items)
+        return "".join(f'<li><img src="{rel}assets/partenaires/{f}.webp" alt="{n}" decoding="async" height="52"></li>' for f, n in items)
     return (f'<div class="marquee{" rev" if reverse else ""}" role="region" aria-label="{label}">'
             f'<ul class="mq-track"><li class="mq-group"><ul>{li(False)}</ul></li><li class="mq-group" aria-hidden="true"><ul>{li(True)}</ul></li></ul></div>')
 
@@ -326,7 +334,7 @@ for i, a in enumerate(arts):
     others = [o for o in arts if o is not a]
     same = [o for o in others if o["category"] == a["category"]]
     related = (same + [o for o in others if o not in same])[:3]
-    rel_cards = "".join(f"""<a class="post" href="{o['slug']}.html" data-cat="{o['category']}">{vis(o['slug'], o['category'][:2])}<div class="post-body"><div class="post-meta"><span class="cat">{o['category']}</span><span>{o['reading']}</span></div><h3>{o['h1']}</h3><p>{o['excerpt']}</p></div></a>""" for o in related)
+    rel_cards = "".join(f"""<a class="post" href="{o['slug']}.html" data-cat="{o['category']}">{vis(o['slug'], o['category'][:2], alt=o['h1'])}<div class="post-body"><div class="post-meta"><span class="cat">{o['category']}</span><span>{o['reading']}</span></div><h3>{o['h1']}</h3><p>{o['excerpt']}</p></div></a>""" for o in related)
     initials = "".join(w[0] for w in a["keyword"].split()[:2]).upper()
     page = head({"title": a["title"], "description": a["description"], "ogtype": "article"}, rel, path, ld) + header(rel, "actualites/index.html") + f"""
 <div class="read-progress" aria-hidden="true"><i></i></div>
@@ -338,13 +346,13 @@ for i, a in enumerate(arts):
       <h1>{a['h1']}</h1>
       <p class="lede">{lede_html}</p>
       <div class="art-meta">
-        <span class="author"><img src="../assets/mickael-thiollier.webp" alt="" width="32" height="32" style="width:32px;height:32px;border-radius:50%;object-fit:cover">Mickaël Thiollier, conseiller en gestion de patrimoine</span>
+        <span class="author"><img src="../assets/mickael-thiollier.webp" alt="Mickaël Thiollier" width="32" height="32" style="width:32px;height:32px;border-radius:50%;object-fit:cover">Mickaël Thiollier, conseiller en gestion de patrimoine</span>
         <time datetime="{a['date']}">Publié le {ymd_fr(a['date'])}</time>
         <span>Mis à jour le {ymd_fr(a['date'])}</span>
       </div>
     </div>
   </div>
-  <div class="art-vis"><div role="img" aria-label="Illustration : {a['keyword']}" style="position:relative">{('<img src="' + photo(a['slug'], 1200) + '" alt="" fetchpriority="high" decoding="async" onload="this.parentNode.classList.add(&#39;has-photo&#39;)" onerror="this.remove()">') if photo(a['slug']) else ''}<span>{initials}</span></div></div>
+  <div class="art-vis"><div role="img" aria-label="Illustration : {a['keyword']}" style="position:relative">{('<img src="' + photo(a['slug'], 1200) + '" alt="' + html.escape(a['keyword'], quote=True) + '" fetchpriority="high" decoding="async" onload="this.parentNode.classList.add(&#39;has-photo&#39;)" onerror="this.remove()">') if photo(a['slug']) else ''}<span>{initials}</span></div></div>
   <div class="art-layout">
     <div class="art-body">
 {ess}
