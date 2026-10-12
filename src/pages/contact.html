@@ -1,0 +1,66 @@
+<!-- meta
+title: Contact | M. Thiollier Conseils, Miribel près de Lyon
+description: Contactez le cabinet M. Thiollier Conseils à Miribel : téléphone, e-mail, adresse, horaires et formulaire. Réponse sous 24h ouvrées.
+priority: 0.6
+faq: 1
+-->
+<section id="contact" style="padding-top:clamp(32px,4vw,56px)">
+  <div class="wrap contact">
+    <div class="coord">
+      <div class="sec-head tight">
+        <span class="eyebrow">Contact</span>
+        <h1 style="font-size:clamp(2rem,4vw,3rem)">Écrivez-moi, je vous rappelle.</h1>
+        <p class="lede">Entre Lyon et la Dombes, à 15 minutes de la Part-Dieu. Réponse sous 24h ouvrées.</p>
+      </div>
+      <dl>
+        <div><dt>Adresse</dt><dd>1000 Grande Rue, 01700 Miribel <a class="copy" href="https://www.google.com/maps/search/?api=1&query=1000+Grande+Rue+01700+Miribel" target="_blank" rel="noopener">Itinéraire</a></dd></div>
+        <div><dt>Téléphone</dt><dd><a href="tel:+33643642964" style="text-decoration:none">06 43 64 29 64</a> <button class="copy" type="button" data-copy="0643642964">Copier</button></dd></div>
+        <div><dt>E-mail</dt><dd><a href="mailto:mickael@mthiollierconseils.fr" style="text-decoration:none">mickael@mthiollierconseils.fr</a> <button class="copy" type="button" data-copy="mickael@mthiollierconseils.fr">Copier</button></dd></div>
+        <div><dt>Horaires</dt><dd>Lundi au vendredi, 9h à 19h · Samedi matin sur rendez-vous</dd></div>
+      </dl>
+    </div>
+    <form class="card" id="contact-form" data-form="contact" data-subject="Message via le site" novalidate>
+      <div data-body>
+        <div class="f2">
+          <label for="c-nom">Nom et prénom<input id="c-nom" name="nom" type="text" autocomplete="name" required data-validate="nom"><span class="err" aria-live="polite"></span></label>
+          <label for="c-tel">Téléphone<input id="c-tel" name="tel" type="tel" autocomplete="tel" inputmode="tel" required data-validate="tel"><span class="err" aria-live="polite"></span></label>
+        </div>
+        <label for="c-mail" style="margin-top:16px">E-mail<input id="c-mail" name="email" type="email" autocomplete="email" required data-validate="email"><span class="err" aria-live="polite"></span></label>
+        <label for="c-sujet" style="margin-top:16px">Votre demande concerne
+          <select id="c-sujet" name="sujet">
+            <option>Un bilan patrimonial</option><option>Réduire mes impôts</option><option>Préparer ma retraite</option><option>Un investissement immobilier</option><option>La trésorerie de mon entreprise</option><option>Une transmission</option><option>Autre</option>
+          </select>
+        </label>
+        <label for="c-msg" style="margin-top:16px">Message<textarea id="c-msg" name="message" placeholder="Décrivez votre situation en quelques lignes."></textarea></label>
+        <label class="hp" aria-hidden="true">Site web<input name="website" type="text" tabindex="-1" autocomplete="off"></label>
+        <div class="form-foot" style="margin-top:16px">
+          <small>Vos données servent uniquement à répondre à votre demande et sont conservées trois ans au plus.</small>
+          <button class="btn btn-primary" type="submit">Envoyer ma demande</button>
+        </div>
+      </div>
+      <div class="sent" id="contact-done" hidden>
+        <b>Demande reçue.</b><span>Je vous rappelle sous 24h ouvrées. Pour aller plus vite, vous pouvez déjà <a href="rendez-vous.html">réserver un créneau</a>.</span>
+        <span data-warn hidden style="font-size:.86rem">Si l'envoi automatique n'est pas encore activé sur ce site, cliquez ci-dessous : votre messagerie s'ouvrira avec le message pré-rempli.</span>
+        <a data-mailto class="btn btn-ghost" href="#" hidden style="justify-self:start;margin-top:8px">Envoyer par e-mail</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section id="faq" class="alt">
+  <div class="wrap faq">
+    <div class="sec-head tight">
+      <span class="eyebrow">Questions fréquentes</span>
+      <h2>Ce que l'on me demande avant le premier rendez-vous.</h2>
+      <p class="lede">Une autre question ? Le formulaire en bas de page est fait pour ça. Et pour aller plus loin, les <a href="actualites/index.html">guides et conseils</a> du cabinet.</p>
+    </div>
+    <div class="faq-list">
+      <details open><summary>Faut-il déjà avoir un patrimoine important ?</summary><p>Non. J'accompagne des profils très variés, quel que soit le niveau de revenus, d'épargne ou de capacité d'épargne mensuelle. L'essentiel est d'anticiper : une stratégie démarrée tôt, même modeste, pèse plus qu'un gros capital placé tard.</p></details>
+      <details><summary>Combien coûte l'accompagnement ?</summary><p>Le premier entretien et l'analyse écrite sont offerts, sans engagement. Si vous décidez de mettre en place mes préconisations, je suis rémunéré par les commissions versées par les partenaires sur les opérations réalisées. Ces montants vous sont présentés par écrit, avant toute signature, conformément au document d'entrée en relation.</p></details>
+      <details><summary>Quelle différence avec mon conseiller bancaire ?</summary><p>Un conseiller bancaire distribue les produits de son réseau. Un cabinet indépendant sélectionne en architecture ouverte parmi plusieurs dizaines d'assureurs, de sociétés de gestion et de promoteurs. Je peux ainsi comparer les frais, les performances et les conditions, et changer de partenaire si nécessaire.</p></details>
+      <details><summary>Comment se déroule le premier rendez-vous ?</summary><p>Après un court échange téléphonique, nous nous rencontrons en visioconférence ou au cabinet à Miribel, pendant environ 1h30. Nous passons en revue votre situation, vos objectifs et vos contraintes. Vous recevez ensuite un bilan écrit avec les premières pistes chiffrées.</p></details>
+      <details><summary>Quels sont les risques ?</summary><p>Tout placement comporte un risque de perte en capital et, pour certains supports comme les SCPI ou le non coté, un risque de liquidité. C'est pourquoi chaque recommandation est précédée d'un bilan complet et d'une évaluation de votre tolérance au risque et de votre horizon.</p></details>
+      <details><summary>Accompagnez-vous aussi les entreprises ?</summary><p>Oui. Dirigeants, TNS et professions libérales représentent une part importante de ma clientèle : placement de trésorerie, protection du dirigeant, optimisation de la rémunération, préparation de la cession.</p></details>
+    </div>
+  </div>
+</section>

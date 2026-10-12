@@ -20,9 +20,12 @@ Les trois formulaires (contact, rendez-vous, candidature) fonctionnent sans serv
 
 ## À compléter avant mise en ligne
 - `src/pages/mentions-legales.html` : champs entre crochets (SIREN, n° ORIAS, hébergeur, RC pro).
-- Photo de Mickaël : `assets/mickael-thiollier.jpg` puis décommenter la balise `<img>` dans `src/pages/index.html`.
+- Photo de Mickaël : `assets/mickael-thiollier.webp` (récupérée du site actuel, 283 px). Remplacer par une version plus grande si disponible.
 - Adresse du domaine dans `build.py` (`SITE`) si différent de mthiollierconseils.fr.
 - Lien Calendly (`CALENDLY` dans `build.py` et dans les pages) et avis Google (lien « voir la fiche »).
 
 ## SEO
 Chaque page : title (< 60 car.), meta description, canonical, Open Graph, JSON-LD (FinancialService, Article, FAQPage, BreadcrumbList, JobPosting, Blog). Articles de 1 800 à 2 300 mots, mot-clé dans title/h1/intro/h2/URL, tableau, FAQ, maillage interne, sources officielles. Lighthouse : aucune dépendance JS externe, polices Google uniquement.
+
+## Photos
+Les photos d'articles et les bandeaux viennent d'Unsplash (licence gratuite, photos non « Unsplash+ »), chargées depuis leur CDN. Les identifiants sont dans `PHOTOS` en haut de `build.py`. Si une photo ne charge pas, un visuel de couleur prend le relais.

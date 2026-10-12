@@ -19,8 +19,30 @@ ADDR = "1000 Grande Rue, 01700 Miribel"
 CALENDLY = "https://calendly.com/m-thiollierconseils/prise-de-contact"
 TODAY = datetime.date.today().isoformat()
 
-NAV = [("index.html#profils", "Vous êtes"), ("index.html#expertises", "Expertises"), ("index.html#methode", "Méthode"),
-       ("actualites/index.html", "Actualités & conseils"), ("recrutement.html", "Recrutement"), ("index.html#contact", "Contact")]
+NAV = [("expertises.html", "Expertises"), ("cabinet.html", "Le cabinet"), ("actualites/index.html", "Actualités & conseils"),
+       ("recrutement.html", "Recrutement"), ("contact.html", "Contact")]
+
+
+U = "https://images.unsplash.com/photo-{}?auto=format&fit=crop&w={}&q=72"
+PHOTOS = {
+    "per-plan-epargne-retraite-guide-2026": "1782994978963-ad86f1eea34c",
+    "preparer-sa-retraite-a-40-ans": "1774354669545-6265156237d4",
+    "assurance-vie-fiscalite-apres-8-ans": "1772588627342-5ec373e236d8",
+    "investir-en-scpi-guide-complet": "1781231702773-4cf3247fc061",
+    "reduire-ses-impots-7-leviers-legaux": "1772588627483-d036793569e8",
+    "placer-tresorerie-entreprise": "1781246212288-7fa538344718",
+    "transmettre-son-patrimoine-donation-demembrement": "1777502626612-68ea24358eeb",
+    "lmnp-location-meublee-2026": "1751945965597-71171ec7a458",
+    "conseiller-gestion-patrimoine-independant-ou-banque": "1569087306794-db9947393580",
+    "investissement-responsable-isr-labels": "1753246281088-51bbd10df0f2",
+}
+def photo(slug, w=1200):
+    pid = PHOTOS.get(slug)
+    return U.format(pid, w) if pid else ""
+def vis(slug, label, w=900, cls="post-vis"):
+    src = photo(slug, w)
+    img = f'<img src="{src}" alt="" loading="lazy" decoding="async" onload="this.parentNode.classList.add(\'has-photo\')" onerror="this.remove()">' if src else ""
+    return f'<div class="{cls}" aria-hidden="true">{img}<span>{label}</span></div>'
 
 def meta_block(src):
     m = re.search(r"<!--\s*meta(.*?)-->", src, re.S)
@@ -40,7 +62,7 @@ def head(meta, rel, path, extra_ld=None):
         "address": {"@type": "PostalAddress", "streetAddress": "1000 Grande Rue", "postalCode": "01700", "addressLocality": "Miribel", "addressCountry": "FR"},
         "geo": {"@type": "GeoCoordinates", "latitude": 45.824046, "longitude": 4.952965},
         "areaServed": ["Miribel", "Lyon", "Ain", "Rhône", "Auvergne-Rhône-Alpes"],
-        "founder": {"@type": "Person", "name": "Mickaël Thiollier", "jobTitle": "Conseiller en gestion de patrimoine"},
+        "founder": {"@type": "Person", "name": "Mickaël Thiollier", "jobTitle": "Conseiller en gestion de patrimoine", "image": SITE + "/assets/mickael-thiollier.webp"},
         "openingHours": "Mo-Fr 09:00-19:00", "priceRange": "Premier entretien offert",
         "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5", "reviewCount": "7"}
     }]
@@ -87,7 +109,7 @@ def header(rel, current):
     </a>
     <ul class="links" id="links">{''.join(items)}</ul>
     <div class="nav-cta">
-      <a class="btn btn-ghost" href="{rel}index.html#simulateur">Simuler mon projet</a>
+      <a class="btn btn-ghost" href="{rel}simulateur.html">Simulateur</a>
       <a class="btn btn-primary" href="{rel}rendez-vous.html">Prendre rendez-vous</a>
       <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="links">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
@@ -108,7 +130,7 @@ def footer(rel):
     </div>
     <div>
       <h4>Navigation</h4>
-      <ul><li><a href="{rel}index.html#profils">Vous êtes</a></li><li><a href="{rel}index.html#expertises">Expertises</a></li><li><a href="{rel}index.html#methode">Méthode</a></li><li><a href="{rel}actualites/index.html">Actualités &amp; conseils</a></li><li><a href="{rel}recrutement.html">Recrutement</a></li><li><a href="{rel}rendez-vous.html">Prendre rendez-vous</a></li></ul>
+      <ul><li><a href="{rel}expertises.html">Expertises</a></li><li><a href="{rel}cabinet.html">Le cabinet</a></li><li><a href="{rel}simulateur.html">Simulateur</a></li><li><a href="{rel}actualites/index.html">Actualités &amp; conseils</a></li><li><a href="{rel}recrutement.html">Recrutement</a></li><li><a href="{rel}rendez-vous.html">Prendre rendez-vous</a></li></ul>
     </div>
     <div>
       <h4>Contact</h4>
@@ -187,8 +209,8 @@ for i, a in enumerate(arts):
     ld = [{
         "@context": "https://schema.org", "@type": "Article", "headline": a["h1"], "description": a["description"],
         "datePublished": a["date"], "dateModified": a["date"], "wordCount": a["words"], "inLanguage": "fr-FR",
-        "mainEntityOfPage": url, "image": f"{SITE}/assets/og-image.svg", "articleSection": a["category"],
-        "author": {"@type": "Person", "name": "Mickaël Thiollier", "jobTitle": "Conseiller en gestion de patrimoine (CIF)", "url": SITE + "/index.html#apropos"},
+        "mainEntityOfPage": url, "image": photo(a["slug"], 1200) or f"{SITE}/assets/og-image.svg", "articleSection": a["category"],
+        "author": {"@type": "Person", "name": "Mickaël Thiollier", "jobTitle": "Conseiller en gestion de patrimoine (CIF)", "url": SITE + "/cabinet.html"},
         "publisher": {"@type": "Organization", "name": BRAND, "url": SITE, "logo": {"@type": "ImageObject", "url": f"{SITE}/assets/favicon.svg"}}
     }, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Accueil", "item": SITE + "/"},
@@ -201,7 +223,7 @@ for i, a in enumerate(arts):
     others = [o for o in arts if o is not a]
     same = [o for o in others if o["category"] == a["category"]]
     related = (same + [o for o in others if o not in same])[:3]
-    rel_cards = "".join(f"""<a class="post" href="{o['slug']}.html" data-cat="{o['category']}"><div class="post-vis" aria-hidden="true"><span>{o['category'][:2]}</span></div><div class="post-body"><div class="post-meta"><span class="cat">{o['category']}</span><span>{o['reading']}</span></div><h3>{o['h1']}</h3><p>{o['excerpt']}</p></div></a>""" for o in related)
+    rel_cards = "".join(f"""<a class="post" href="{o['slug']}.html" data-cat="{o['category']}">{vis(o['slug'], o['category'][:2])}<div class="post-body"><div class="post-meta"><span class="cat">{o['category']}</span><span>{o['reading']}</span></div><h3>{o['h1']}</h3><p>{o['excerpt']}</p></div></a>""" for o in related)
     initials = "".join(w[0] for w in a["keyword"].split()[:2]).upper()
     page = head({"title": a["title"], "description": a["description"], "ogtype": "article"}, rel, path, ld) + header(rel, "actualites/index.html") + f"""
 <article>
@@ -212,19 +234,19 @@ for i, a in enumerate(arts):
       <h1>{a['h1']}</h1>
       <p class="lede">{lede_html}</p>
       <div class="art-meta">
-        <span class="author"><span class="monogram" aria-hidden="true">MT</span>Mickaël Thiollier, conseiller en gestion de patrimoine</span>
+        <span class="author"><img src="../assets/mickael-thiollier.webp" alt="" width="32" height="32" style="width:32px;height:32px;border-radius:50%;object-fit:cover">Mickaël Thiollier, conseiller en gestion de patrimoine</span>
         <time datetime="{a['date']}">Publié le {ymd_fr(a['date'])}</time>
         <span>Mis à jour le {ymd_fr(a['date'])}</span>
       </div>
     </div>
   </div>
-  <div class="art-vis"><div role="img" aria-label="Illustration : {a['keyword']}"><span>{initials}</span></div></div>
+  <div class="art-vis"><div role="img" aria-label="Illustration : {a['keyword']}" style="position:relative">{('<img src="' + photo(a['slug'], 1600) + '" alt="" fetchpriority="high" decoding="async" onload="this.parentNode.classList.add(&#39;has-photo&#39;)" onerror="this.remove()">') if photo(a['slug']) else ''}<span>{initials}</span></div></div>
   <div class="art-layout">
     <div class="art-body">
 {body}
       <p class="disclaimer">Les informations de cet article sont fournies à titre pédagogique à la date de publication et ne constituent pas un conseil personnalisé. Les placements présentent un risque de perte en capital ; la fiscalité dépend de votre situation et de la législation en vigueur. Seule une étude patrimoniale permet de valider une stratégie.</p>
       <div class="author-box">
-        <span class="monogram" aria-hidden="true">MT</span>
+        <img src="../assets/mickael-thiollier.webp" alt="Mickaël Thiollier" width="64" height="64" style="width:64px;height:64px;border-radius:50%;object-fit:cover">
         <div><b>Mickaël Thiollier</b><p>Conseiller en gestion de patrimoine indépendant (CIF, ORIAS, CNCEF) à Miribel, près de Lyon. Dix ans de finance après un parcours en immobilier. Il reçoit en visio ou au cabinet pour un premier entretien offert.</p><p style="margin-top:10px"><a class="btn btn-ghost" href="../rendez-vous.html">Prendre rendez-vous</a></p></div>
       </div>
     </div>
@@ -244,7 +266,7 @@ cats = sorted(set(a["category"] for a in arts))
 filters = '<button class="tab" role="tab" aria-selected="true" data-cat="all">Tous</button>' + "".join(f'<button class="tab" role="tab" aria-selected="false" data-cat="{c}">{c}</button>' for c in cats)
 cards = ""
 for i, a in enumerate(arts):
-    cards += f"""<a class="post{' featured' if i == 0 else ''}" href="{a['slug']}.html" data-cat="{a['category']}"><div class="post-vis" aria-hidden="true"><span>{''.join(w[0] for w in a['keyword'].split()[:2]).upper()}</span></div><div class="post-body"><div class="post-meta"><span class="cat">{a['category']}</span><span>{ymd_fr(a['date'])}</span><span>{a['reading']}</span></div><h3>{a['h1']}</h3><p>{a['excerpt']}</p></div></a>"""
+    cards += f"""<a class="post{' featured' if i == 0 else ''}" href="{a['slug']}.html" data-cat="{a['category']}">{vis(a['slug'], ''.join(w[0] for w in a['keyword'].split()[:2]).upper(), 1400 if i == 0 else 900)}<div class="post-body"><div class="post-meta"><span class="cat">{a['category']}</span><span>{ymd_fr(a['date'])}</span><span>{a['reading']}</span></div><h3>{a['h1']}</h3><p>{a['excerpt']}</p></div></a>"""
 idx_meta = {"title": "Actualités & conseils gestion de patrimoine | M. Thiollier",
             "description": "Guides clairs et chiffrés sur le PER, l'assurance-vie, les SCPI, la fiscalité, la retraite et la transmission, rédigés par un conseiller indépendant près de Lyon."}
 ld_idx = [{"@context": "https://schema.org", "@type": "Blog", "name": "Actualités & conseils", "url": SITE + "/actualites/", "publisher": {"@type": "Organization", "name": BRAND},
@@ -263,7 +285,7 @@ idx = head(idx_meta, "../", "actualites/index.html", ld_idx) + header("../", "ac
 </div></section>
 <section class="band"><div class="wrap">
   <div><span class="eyebrow">Et pour votre cas ?</span><h2>Un article répond à une question générale. Un entretien répond à la vôtre.</h2><p>1h30 offertes, en visio ou à Miribel, pour poser votre situation à plat et repartir avec un bilan écrit.</p></div>
-  <div class="actions"><a class="btn btn-primary" href="../rendez-vous.html">Prendre rendez-vous</a><a class="btn btn-ghost" href="../index.html#simulateur">Faire le point en 2 minutes</a></div>
+  <div class="actions"><a class="btn btn-primary" href="../rendez-vous.html">Prendre rendez-vous</a><a class="btn btn-ghost" href="../simulateur.html">Faire le point en 2 minutes</a></div>
 </div></section>
 """ + footer("../")
 write("actualites/index.html", idx)

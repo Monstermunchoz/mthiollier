@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulateur patrimonial gratuit en 4 questions | M. Thiollier</title>
+<meta name="description" content="Quatre questions, deux minutes : obtenez une première orientation patrimoniale (fiscalité, épargne, revenus, transmission) et les solutions adaptées à votre profil.">
+<link rel="canonical" href="https://mthiollierconseils.fr/simulateur.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Simulateur patrimonial gratuit en 4 questions | M. Thiollier">
+<meta property="og:description" content="Quatre questions, deux minutes : obtenez une première orientation patrimoniale (fiscalité, épargne, revenus, transmission) et les solutions adaptées à votre profil.">
+<meta property="og:url" content="https://mthiollierconseils.fr/simulateur.html">
+<meta property="og:site_name" content="M. Thiollier Conseils">
+<meta property="og:image" content="https://mthiollierconseils.fr/assets/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Albert+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">[{"@context": "https://schema.org", "@type": "FinancialService", "name": "M. Thiollier Conseils", "url": "https://mthiollierconseils.fr/", "telephone": "+33643642964", "email": "mickael@mthiollierconseils.fr", "address": {"@type": "PostalAddress", "streetAddress": "1000 Grande Rue", "postalCode": "01700", "addressLocality": "Miribel", "addressCountry": "FR"}, "geo": {"@type": "GeoCoordinates", "latitude": 45.824046, "longitude": 4.952965}, "areaServed": ["Miribel", "Lyon", "Ain", "Rhône", "Auvergne-Rhône-Alpes"], "founder": {"@type": "Person", "name": "Mickaël Thiollier", "jobTitle": "Conseiller en gestion de patrimoine", "image": "https://mthiollierconseils.fr/assets/mickael-thiollier.webp"}, "openingHours": "Mo-Fr 09:00-19:00", "priceRange": "Premier entretien offert", "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5", "reviewCount": "7"}}]</script>
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="M. Thiollier Conseils, accueil">
+      <span class="monogram" aria-hidden="true">MT</span>
+      <span>M. Thiollier Conseils<small>Gestion de patrimoine · Miribel</small></span>
+    </a>
+    <ul class="links" id="links"><li><a href="expertises.html">Expertises</a></li><li><a href="cabinet.html">Le cabinet</a></li><li><a href="actualites/index.html">Actualités & conseils</a></li><li><a href="recrutement.html">Recrutement</a></li><li><a href="contact.html">Contact</a></li></ul>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="simulateur.html">Simulateur</a>
+      <a class="btn btn-primary" href="rendez-vous.html">Prendre rendez-vous</a>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="links">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="main">
+<section id="simulateur" style="padding-top:clamp(40px,6vw,72px)">
+  <div class="wrap">
+    <div class="sim">
+      <div class="sec-head tight">
+        <span class="eyebrow">Simulateur</span>
+        <h1 style="font-size:clamp(2rem,4vw,3rem)">Quelle piste explorer en premier ?</h1>
+        <p class="lede">Quatre questions, deux minutes. Vous obtenez une première orientation et les solutions généralement adaptées à votre cas. Rien n'est enregistré ni transmis.</p>
+        <p class="lede" style="font-size:.95rem">Ce n'est pas un conseil personnalisé : seul l'entretien permet de valider une stratégie en connaissance de votre situation complète.</p>
+      </div>
+
+      <div class="sim-card" id="sim">
+        <div class="progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+
+        <div class="q" data-step="0">
+          <h3>Quelle est votre situation professionnelle ?</h3>
+          <div class="opts" data-key="pro">
+            <button class="opt" data-v="salarie" id="s-pro-1" aria-pressed="false">Salarié ou cadre</button>
+            <button class="opt" data-v="dirigeant" id="s-pro-2" aria-pressed="false">Dirigeant, TNS, indépendant</button>
+            <button class="opt" data-v="liberal" id="s-pro-3" aria-pressed="false">Profession libérale</button>
+            <button class="opt" data-v="retraite" id="s-pro-4" aria-pressed="false">Retraité</button>
+          </div>
+        </div>
+        <div class="q" data-step="1" hidden>
+          <h3>Votre impôt sur le revenu annuel ?</h3>
+          <div class="opts" data-key="ir">
+            <button class="opt" data-v="0" id="s-ir-1" aria-pressed="false">Non imposable</button>
+            <button class="opt" data-v="1" id="s-ir-2" aria-pressed="false">Moins de 3 000 €</button>
+            <button class="opt" data-v="2" id="s-ir-3" aria-pressed="false">3 000 à 10 000 €</button>
+            <button class="opt" data-v="3" id="s-ir-4" aria-pressed="false">Plus de 10 000 €</button>
+          </div>
+        </div>
+        <div class="q" data-step="2" hidden>
+          <h3>Votre objectif principal ?</h3>
+          <div class="opts" data-key="obj">
+            <button class="opt" data-v="creer" id="s-obj-1" aria-pressed="false">Créer un patrimoine</button>
+            <button class="opt" data-v="revenus" id="s-obj-2" aria-pressed="false">Des revenus complémentaires</button>
+            <button class="opt" data-v="fisc" id="s-obj-3" aria-pressed="false">Payer moins d'impôts</button>
+            <button class="opt" data-v="transmettre" id="s-obj-4" aria-pressed="false">Transmettre</button>
+          </div>
+        </div>
+        <div class="q" data-step="3" hidden>
+          <h3>Votre horizon de placement ?</h3>
+          <div class="opts" data-key="horizon">
+            <button class="opt" data-v="court" id="s-h-1" aria-pressed="false">Moins de 3 ans</button>
+            <button class="opt" data-v="moyen" id="s-h-2" aria-pressed="false">3 à 8 ans</button>
+            <button class="opt" data-v="long" id="s-h-3" aria-pressed="false">Plus de 8 ans</button>
+          </div>
+        </div>
+
+        <div class="result" data-step="4" hidden>
+          <span class="eyebrow">Première orientation</span>
+          <h3 id="r-title">Résultat</h3>
+          <p class="lede" id="r-text" style="font-size:1rem"></p>
+          <div class="reco"><ul id="r-list"></ul></div>
+          <a class="btn btn-primary" id="r-link" href="rendez-vous.html">Valider cette piste en entretien</a>
+          <p class="disc">Orientation indicative établie à partir de quatre réponses. Les investissements présentent un risque de perte en capital et de liquidité ; la fiscalité dépend de votre situation et de la législation en vigueur.</p>
+        </div>
+
+        <div class="sim-nav">
+          <button class="btn btn-ghost" id="sim-prev" type="button" disabled>Précédent</button>
+          <span class="sim-count" id="sim-count">1 / 4</span>
+          <button class="btn btn-navy" id="sim-next" type="button" disabled>Suivant</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Passer à l'action</span>
+      <h2>Prenons le temps de parler de vos objectifs.</h2>
+      <p>Un créneau d'1h30, en visio ou à Miribel. Vous repartez avec une vision claire, que vous poursuiviez ou non avec moi.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn-primary" href="rendez-vous.html">Réserver un créneau</a>
+      <a class="btn btn-ghost" href="contact.html">Écrire un message</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <a class="brand" href="index.html"><span class="monogram" aria-hidden="true">MT</span><span>M. Thiollier Conseils<small>Gestion de patrimoine · Miribel</small></span></a>
+      <p>Cabinet indépendant de conseil en gestion de patrimoine près de Lyon. Conseiller en investissements financiers (CIF) enregistré à l'ORIAS, membre de la CNCEF Patrimoine, association agréée par l'AMF.</p>
+    </div>
+    <div>
+      <h4>Navigation</h4>
+      <ul><li><a href="expertises.html">Expertises</a></li><li><a href="cabinet.html">Le cabinet</a></li><li><a href="simulateur.html">Simulateur</a></li><li><a href="actualites/index.html">Actualités &amp; conseils</a></li><li><a href="recrutement.html">Recrutement</a></li><li><a href="rendez-vous.html">Prendre rendez-vous</a></li></ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul><li>1000 Grande Rue, 01700 Miribel</li><li>06 43 64 29 64</li><li>mickael@mthiollierconseils.fr</li><li>Lundi au vendredi, 9h à 19h</li></ul>
+    </div>
+    <div class="legal">
+      <span>© 2026 Mickaël Thiollier. Tous droits réservés.</span>
+      <span><a href="mentions-legales.html">Mentions légales</a> · <a href="mentions-legales.html#cgu">Conditions générales</a> · <a href="mentions-legales.html#rgpd">Confidentialité</a></span>
+    </div>
+  </div>
+</footer>
+<script src="assets/main.js" defer></script>
+</body>
+</html>

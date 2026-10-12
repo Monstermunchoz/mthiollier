@@ -172,13 +172,35 @@
     });
   });
 
-  /* ---------- Page rendez-vous : étapes légères ---------- */
+  /* ---------- Rendez-vous : assistant en 3 étapes ---------- */
   var rdv = $('#rdv');
   if (rdv) {
-    var mode = $$('input[name="format"]', rdv);
-    var cren = $('#creneau-wrap');
-    var upd = function () { var v = (mode.filter(function (m) { return m.checked; })[0] || {}).value; if (cren) cren.hidden = v === 'calendly'; };
+    var steps = $$('.wz-step', rdv), cur = 0;
+    var ind = $$('.wz-steps li', rdv), bar = $('.wz-bar i', rdv);
+    var prevB = $('[data-wz-prev]', rdv), nextB = $('[data-wz-next]', rdv), subB = $('[data-wz-submit]', rdv);
+    var go = function (n) {
+      cur = Math.max(0, Math.min(steps.length - 1, n));
+      steps.forEach(function (st, i) { st.hidden = i !== cur; });
+      ind.forEach(function (li, i) { li.classList.toggle('on', i === cur); li.classList.toggle('done', i < cur); });
+      if (bar) bar.style.width = ((cur + 1) / steps.length * 100) + '%';
+      prevB.hidden = cur === 0;
+      nextB.hidden = cur === steps.length - 1;
+      subB.hidden = cur !== steps.length - 1;
+      var f = $('input, textarea', steps[cur]);
+      if (cur === steps.length - 1 && f) setTimeout(function () { f.focus({ preventScroll: true }); }, 50);
+      var top = rdv.getBoundingClientRect().top;
+      if (top < 0) rdv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    nextB.addEventListener('click', function () { go(cur + 1); });
+    prevB.addEventListener('click', function () { go(cur - 1); });
+    /* Entrée dans un champ texte des étapes 1-2 : passer à la suite */
+    rdv.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && cur < steps.length - 1 && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); go(cur + 1); }
+    });
+    var mode = $$('input[name="format"]', rdv), cren = $('#creneau-wrap');
+    var upd = function () { var v = (mode.filter(function (m) { return m.checked; })[0] || {}).value; if (cren) cren.hidden = false; };
     mode.forEach(function (m) { m.addEventListener('change', upd); }); upd();
+    go(0);
   }
 
   /* ---------- Sommaire d'article : section active ---------- */
