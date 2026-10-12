@@ -88,7 +88,7 @@ def head(meta, rel, path, extra_ld=None):
 <link rel="icon" href="{rel}assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Albert+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@1&display=swap">
 <link rel="stylesheet" href="{rel}assets/style.css">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 </head>
@@ -101,19 +101,17 @@ def header(rel, current):
     for href, label in NAV:
         cur = ' aria-current="page"' if current and "#" not in href and href == current else ""
         items.append(f'<li><a href="{rel}{href}"{cur}>{label}</a></li>')
-    return f"""<header class="site-header">
+    return f"""<header class="site-header" id="top">
   <div class="wrap nav">
     <a class="brand" href="{rel}index.html" aria-label="{BRAND}, accueil">
       <span class="monogram" aria-hidden="true">MT</span>
-      <span>{BRAND}<small>Gestion de patrimoine · Miribel</small></span>
+      <span class="brand-text"><b>{BRAND}</b><small>Gestion de patrimoine · Lyon &amp; Ain</small></span>
     </a>
     <ul class="links" id="links">{''.join(items)}</ul>
     <div class="nav-cta">
-      <a class="btn btn-ghost" href="{rel}simulateur.html">Simulateur</a>
+      <a class="btn btn-ghost" href="tel:+33643642964"><i data-i="phone"></i>06 43 64 29 64</a>
       <a class="btn btn-primary" href="{rel}rendez-vous.html">Prendre rendez-vous</a>
-      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="links">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
-      </button>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="links"><i data-i="menu"></i></button>
     </div>
   </div>
 </header>
@@ -125,16 +123,20 @@ def footer(rel):
 <footer class="foot">
   <div class="wrap">
     <div>
-      <a class="brand" href="{rel}index.html"><span class="monogram" aria-hidden="true">MT</span><span>{BRAND}<small>Gestion de patrimoine · Miribel</small></span></a>
-      <p>Cabinet indépendant de conseil en gestion de patrimoine près de Lyon. Conseiller en investissements financiers (CIF) enregistré à l'ORIAS, membre de la CNCEF Patrimoine, association agréée par l'AMF.</p>
+      <a class="brand" href="{rel}index.html"><span class="monogram" aria-hidden="true">MT</span><span class="brand-text"><b>{BRAND}</b><small>Gestion de patrimoine · Lyon &amp; Ain</small></span></a>
+      <p>Cabinet indépendant de conseil en gestion de patrimoine à Miribel, près de Lyon. Conseiller en investissements financiers (CIF) enregistré à l'ORIAS, membre de la CNCEF Patrimoine, association agréée par l'AMF.</p>
     </div>
     <div>
-      <h4>Navigation</h4>
-      <ul><li><a href="{rel}expertises.html">Expertises</a></li><li><a href="{rel}cabinet.html">Le cabinet</a></li><li><a href="{rel}simulateur.html">Simulateur</a></li><li><a href="{rel}actualites/index.html">Actualités &amp; conseils</a></li><li><a href="{rel}recrutement.html">Recrutement</a></li><li><a href="{rel}rendez-vous.html">Prendre rendez-vous</a></li></ul>
+      <h4>Le cabinet</h4>
+      <ul><li><a href="{rel}expertises.html">Expertises</a></li><li><a href="{rel}cabinet.html">Qui suis-je</a></li><li><a href="{rel}simulateur.html">Simulateur</a></li><li><a href="{rel}recrutement.html">Recrutement</a></li></ul>
+    </div>
+    <div>
+      <h4>Ressources</h4>
+      <ul><li><a href="{rel}actualites/index.html">Actualités &amp; conseils</a></li><li><a href="{rel}actualites/per-plan-epargne-retraite-guide-2026.html">Guide du PER</a></li><li><a href="{rel}actualites/assurance-vie-fiscalite-apres-8-ans.html">Fiscalité de l'assurance-vie</a></li><li><a href="{rel}actualites/reduire-ses-impots-7-leviers-legaux.html">Réduire ses impôts</a></li></ul>
     </div>
     <div>
       <h4>Contact</h4>
-      <ul><li>{ADDR}</li><li>{PHONE}</li><li>{EMAIL}</li><li>Lundi au vendredi, 9h à 19h</li></ul>
+      <ul><li>{ADDR}</li><li><a href="tel:+33643642964">{PHONE}</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="{rel}rendez-vous.html">Prendre rendez-vous</a></li></ul>
     </div>
     <div class="legal">
       <span>© 2026 Mickaël Thiollier. Tous droits réservés.</span>
@@ -147,9 +149,60 @@ def footer(rel):
 </html>
 """
 
+ICONS = {}
+def _icon(name, cls):
+    if name not in ICONS:
+        p = ROOT / "src/icons" / f"{name}.svg"
+        if not p.exists():
+            raise SystemExit(f"Icône introuvable : {name}")
+        svg = re.sub(r"<!--.*?-->", "", p.read_text(), flags=re.S).strip()
+        svg = re.sub(r"\s+", " ", svg)
+        svg = re.sub(r'class="[^"]*"', "", svg)
+        svg = re.sub(r'\s(width|height)="24"', "", svg).replace('stroke-width="2"', 'stroke-width="1.75"')
+        ICONS[name] = svg
+    klass = ("i " + cls).strip()
+    return ICONS[name].replace("<svg ", f'<svg class="{klass}" aria-hidden="true" focusable="false" ', 1)
+
+def icons(html_text):
+    return re.sub(r'<i data-i="([a-z0-9-]+)"(?: class="([^"]*)")?></i>', lambda m: _icon(m.group(1), m.group(2) or ""), html_text)
+
 def write(path, content):
     p = ROOT / path; p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(content, encoding="utf-8"); print("✓", path)
+    p.write_text(icons(content), encoding="utf-8"); print("✓", path)
+
+# ---------- Articles ----------
+arts = []
+for f in sorted((ROOT / "src/articles").glob("*.html")):
+    meta, body = meta_block(f.read_text(encoding="utf-8"))
+    meta["slug"] = f.stem
+    meta["body"] = body
+    h1 = re.search(r"<h1[^>]*>(.*?)</h1>", body, re.S).group(1)
+    meta["h1"] = re.sub("<.*?>", "", h1).strip()
+    meta["words"] = len(re.sub("<.*?>", " ", body).split())
+    arts.append(meta)
+arts.sort(key=lambda m: m["date"], reverse=True)
+
+CTA = """<div class="cta-band s-white">
+  <div class="wrap">
+    <div class="cta-box">
+      <div>
+        <h2>Prenons 1h30 pour parler <em>de vos objectifs.</em></h2>
+        <p>En visio ou au cabinet de Miribel. Vous repartez avec un bilan écrit, que vous poursuiviez ou non.</p>
+      </div>
+      <div class="actions">
+        <a class="btn btn-dark btn-lg" href="{REL}rendez-vous.html">Réserver mon créneau<i data-i="arrow-right"></i></a>
+        <a class="btn btn-ghost btn-lg" href="{REL}contact.html">Poser une question</a>
+      </div>
+    </div>
+  </div>
+</div>"""
+
+def card(o, featured=False, w=900):
+    lab = "".join(x[0] for x in o["keyword"].split()[:2]).upper()
+    return (f'<a class="post{" featured" if featured else ""}" href="{{REL}}actualites/{o["slug"]}.html" data-cat="{o["category"]}">'
+            f'{vis(o["slug"], lab, w)}<div class="post-body"><div class="post-meta"><span class="cat">{o["category"]}</span>'
+            f'<span>{o["reading"]} de lecture</span></div><h3>{o["h1"]}</h3><p>{o["excerpt"]}</p></div></a>')
+LATEST = '<div class="posts">' + "".join(card(o) for o in arts[:3]) + '</div>'
 
 # ---------- Pages ----------
 pages = []
@@ -166,27 +219,17 @@ for f in sorted((ROOT / "src/pages").glob("*.html")):
         extra = (extra or []) + [{
             "@context": "https://schema.org", "@type": "JobPosting",
             "title": "Conseiller(ère) en gestion de patrimoine – développement commercial",
-            "description": "Rejoignez un cabinet indépendant près de Lyon : clientèle particuliers et dirigeants, architecture ouverte, rémunération non plafonnée, formation et back-office assurés.",
-            "datePosted": TODAY, "employmentType": ["FULL_TIME", "CONTRACTOR"],
+            "description": "Rejoignez un cabinet indépendant près de Lyon en tant que mandataire : clientèle particuliers et dirigeants, architecture ouverte, rémunération 100 % variable non plafonnée, formation et back-office assurés.",
+            "datePosted": TODAY, "employmentType": "CONTRACTOR",
             "hiringOrganization": {"@type": "Organization", "name": BRAND, "sameAs": SITE},
             "jobLocation": {"@type": "Place", "address": {"@type": "PostalAddress", "streetAddress": "1000 Grande Rue", "postalCode": "01700", "addressLocality": "Miribel", "addressRegion": "Auvergne-Rhône-Alpes", "addressCountry": "FR"}},
             "applicantLocationRequirements": {"@type": "Country", "name": "France"},
             "jobLocationType": "TELECOMMUTE", "directApply": True
         }]
+    body = body.replace("<!--LATEST-->", LATEST.replace("{REL}", "")).replace("<!--CTA-->", CTA.replace("{REL}", ""))
     out = head(meta, rel, name, extra) + header(rel, name) + body + "\n" + footer(rel)
     write(name, out); pages.append((name, meta.get("priority", "0.7")))
 
-# ---------- Articles ----------
-arts = []
-for f in sorted((ROOT / "src/articles").glob("*.html")):
-    meta, body = meta_block(f.read_text(encoding="utf-8"))
-    meta["slug"] = f.stem
-    meta["body"] = body
-    h1 = re.search(r"<h1[^>]*>(.*?)</h1>", body, re.S).group(1)
-    meta["h1"] = re.sub("<.*?>", "", h1).strip()
-    meta["words"] = len(re.sub("<.*?>", " ", body).split())
-    arts.append(meta)
-arts.sort(key=lambda m: m["date"], reverse=True)
 
 def ymd_fr(d):
     y, m, dd = d.split("-"); mois = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]
@@ -229,7 +272,7 @@ for i, a in enumerate(arts):
 <article>
   <div class="art-head">
     <div class="wrap">
-      <nav class="crumbs" aria-label="Fil d'Ariane"><a href="../index.html">Accueil</a><span>›</span><a href="index.html">Actualités &amp; conseils</a><span>›</span><span>{a['category']}</span></nav>
+      <nav class="crumbs" aria-label="Fil d'Ariane"><a href="../index.html">Accueil</a><span>/</span><a href="index.html">Actualités &amp; conseils</a><span>/</span><span>{a['category']}</span></nav>
       <span class="eyebrow">{a['category']} · {a['reading']} de lecture</span>
       <h1>{a['h1']}</h1>
       <p class="lede">{lede_html}</p>
@@ -247,18 +290,18 @@ for i, a in enumerate(arts):
       <p class="disclaimer">Les informations de cet article sont fournies à titre pédagogique à la date de publication et ne constituent pas un conseil personnalisé. Les placements présentent un risque de perte en capital ; la fiscalité dépend de votre situation et de la législation en vigueur. Seule une étude patrimoniale permet de valider une stratégie.</p>
       <div class="author-box">
         <img src="../assets/mickael-thiollier.webp" alt="Mickaël Thiollier" width="64" height="64" style="width:64px;height:64px;border-radius:50%;object-fit:cover">
-        <div><b>Mickaël Thiollier</b><p>Conseiller en gestion de patrimoine indépendant (CIF, ORIAS, CNCEF) à Miribel, près de Lyon. Dix ans de finance après un parcours en immobilier. Il reçoit en visio ou au cabinet pour un premier entretien offert.</p><p style="margin-top:10px"><a class="btn btn-ghost" href="../rendez-vous.html">Prendre rendez-vous</a></p></div>
+        <div><b>Mickaël Thiollier</b><p>Conseiller en gestion de patrimoine indépendant (CIF, ORIAS, CNCEF) à Miribel, près de Lyon. Dix ans de finance après un parcours en immobilier. Il reçoit en visio ou au cabinet pour un premier entretien offert.</p><p style="margin-top:14px"><a class="btn btn-dark" href="../rendez-vous.html">Prendre rendez-vous<i data-i="arrow-right"></i></a></p></div>
       </div>
     </div>
     <aside class="toc" aria-label="Sommaire">
       <b>Sommaire</b>
       <ol>{toc}</ol>
-      <div class="cta"><p>Une question sur votre situation ?</p><a class="btn btn-primary" href="../rendez-vous.html">Premier entretien offert</a></div>
+      <div class="cta"><p>Une question sur votre situation&nbsp;? Parlons-en, le premier entretien est offert.</p><a class="btn btn-primary" href="../rendez-vous.html">Prendre rendez-vous</a></div>
     </aside>
   </div>
 </article>
 <section class="related"><div class="wrap"><h2>À lire ensuite</h2><div class="posts">{rel_cards}</div></div></section>
-""" + footer(rel)
+""" + CTA.replace("{REL}", "../") + footer(rel)
     write(path, page)
 
 # ---------- Index des actualités ----------
@@ -266,28 +309,22 @@ cats = sorted(set(a["category"] for a in arts))
 filters = '<button class="tab" role="tab" aria-selected="true" data-cat="all">Tous</button>' + "".join(f'<button class="tab" role="tab" aria-selected="false" data-cat="{c}">{c}</button>' for c in cats)
 cards = ""
 for i, a in enumerate(arts):
-    cards += f"""<a class="post{' featured' if i == 0 else ''}" href="{a['slug']}.html" data-cat="{a['category']}">{vis(a['slug'], ''.join(w[0] for w in a['keyword'].split()[:2]).upper(), 1400 if i == 0 else 900)}<div class="post-body"><div class="post-meta"><span class="cat">{a['category']}</span><span>{ymd_fr(a['date'])}</span><span>{a['reading']}</span></div><h3>{a['h1']}</h3><p>{a['excerpt']}</p></div></a>"""
+    cards += f"""<a class="post{' featured' if i == 0 else ''}" href="{a['slug']}.html" data-cat="{a['category']}">{vis(a['slug'], ''.join(w[0] for w in a['keyword'].split()[:2]).upper(), 1400 if i == 0 else 900)}<div class="post-body"><div class="post-meta"><span class="cat">{a['category']}</span><span>{ymd_fr(a['date'])}</span><span>· {a['reading']}</span></div><h3>{a['h1']}</h3><p>{a['excerpt']}</p></div></a>"""
 idx_meta = {"title": "Actualités & conseils gestion de patrimoine | M. Thiollier",
             "description": "Guides clairs et chiffrés sur le PER, l'assurance-vie, les SCPI, la fiscalité, la retraite et la transmission, rédigés par un conseiller indépendant près de Lyon."}
 ld_idx = [{"@context": "https://schema.org", "@type": "Blog", "name": "Actualités & conseils", "url": SITE + "/actualites/", "publisher": {"@type": "Organization", "name": BRAND},
            "blogPost": [{"@type": "BlogPosting", "headline": a["h1"], "url": f"{SITE}/actualites/{a['slug']}.html", "datePublished": a["date"]} for a in arts]}]
 idx = head(idx_meta, "../", "actualites/index.html", ld_idx) + header("../", "actualites/index.html") + f"""
-<div class="page-head"><div class="wrap">
-  <div class="sec-head tight">
-    <span class="eyebrow">Actualités &amp; conseils</span>
-    <h1 style="font-size:clamp(2.2rem,4.5vw,3.6rem)">Comprendre avant de placer.</h1>
-    <p class="lede">Des guides longs, sourcés et mis à jour, écrits par le conseiller que vous rencontrerez. Pas de résumé de plaquette : les chiffres 2026, les cas où ça marche et ceux où ça ne marche pas.</p>
-  </div>
-</div></div>
-<section style="padding-top:0"><div class="wrap">
+<section class="page-head"><div class="wrap">
+  <nav class="crumbs" aria-label="Fil d'Ariane"><a href="../index.html">Accueil</a><span>/</span><span>Actualités &amp; conseils</span></nav>
+  <h1>Comprendre <em>avant de placer.</em></h1>
+  <p class="lede">Des guides longs, sourcés et mis à jour, écrits par le conseiller que vous rencontrerez. Les chiffres 2026, les cas où ça marche et ceux où ça ne marche pas.</p>
+</div></section>
+<section class="s-white" style="padding-top:clamp(48px,6vw,72px)"><div class="wrap">
   <div class="filters" role="tablist" aria-label="Filtrer par thème">{filters}</div>
   <div class="posts">{cards}</div>
 </div></section>
-<section class="band"><div class="wrap">
-  <div><span class="eyebrow">Et pour votre cas ?</span><h2>Un article répond à une question générale. Un entretien répond à la vôtre.</h2><p>1h30 offertes, en visio ou à Miribel, pour poser votre situation à plat et repartir avec un bilan écrit.</p></div>
-  <div class="actions"><a class="btn btn-primary" href="../rendez-vous.html">Prendre rendez-vous</a><a class="btn btn-ghost" href="../simulateur.html">Faire le point en 2 minutes</a></div>
-</div></section>
-""" + footer("../")
+""" + CTA.replace("{REL}", "../") + footer("../")
 write("actualites/index.html", idx)
 
 # ---------- Sitemap & robots ----------

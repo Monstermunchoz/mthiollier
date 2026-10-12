@@ -6,7 +6,8 @@ Site statique (HTML/CSS/JS sans framework), hébergeable sur GitHub Pages, Netli
 - `src/pages/*.html` : contenu des pages (accueil, rendez-vous, recrutement, mentions légales) avec un bloc `<!-- meta -->`.
 - `src/articles/*.html` : contenu des articles (voir `src/articles/BRIEF.md` pour la charte SEO).
 - `build.py` : assemble en-tête, pied de page, données structurées (JSON-LD), sommaire des articles, index des actualités, `sitemap.xml` et `robots.txt`.
-- `assets/` : `style.css`, `main.js`, favicon, image de partage.
+- `assets/` : `style.css`, `main.js`, favicon, image de partage, portrait.
+- `src/icons/` : icônes Lucide (licence ISC). Dans les pages, écrire `<i data-i="nom-icone"></i>` : le build remplace par le SVG.
 
 ## Modifier le site
 1. Éditer un fichier dans `src/`.

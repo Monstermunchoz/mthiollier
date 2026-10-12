@@ -4,6 +4,10 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
+  /* ---------- En-tête : filet au défilement ---------- */
+  var hdr = $('.site-header');
+  if (hdr) { var onS = function () { hdr.classList.toggle('scrolled', window.scrollY > 8); }; window.addEventListener('scroll', onS, { passive: true }); onS(); }
+
   /* ---------- Menu mobile ---------- */
   var burger = $('#burger'), links = $('#links');
   if (burger && links) {
@@ -86,7 +90,7 @@
       t.textContent = title; x.textContent = text; l.innerHTML = '';
       recos.forEach(function (r) {
         var li = document.createElement('li');
-        li.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" style="margin-top:3px;color:var(--amber)"><path d="M3 9l4 4 8-8"/></svg><div><b></b><br><span></span></div>';
+        li.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:2px;color:var(--ok)"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><div><b></b><br><span></span></div>';
         li.querySelector('b').textContent = r[0]; li.querySelector('span').textContent = r[1]; l.appendChild(li);
       });
       try { var link = $('#r-link'); if (link) link.href = 'rendez-vous.html?objet=' + encodeURIComponent(o || ''); } catch (e) {}
