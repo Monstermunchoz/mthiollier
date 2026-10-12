@@ -214,7 +214,7 @@ for f in sorted((ROOT / "src/pages").glob("*.html")):
     if meta.get("faq") == "1":
         qs = re.findall(r"<summary>(.*?)</summary>\s*<p>(.*?)</p>", body, re.S)
         extra = [{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
-            {"@type": "Question", "name": re.sub("<.*?>", "", q).strip(), "acceptedAnswer": {"@type": "Answer", "text": re.sub("<.*?>", "", a).strip()}} for q, a in qs]}]
+            {"@type": "Question", "name": html.unescape(re.sub("<.*?>", "", q)).strip(), "acceptedAnswer": {"@type": "Answer", "text": html.unescape(re.sub("<.*?>", "", a)).strip()}} for q, a in qs]}]
     if meta.get("jobposting") == "1":
         extra = (extra or []) + [{
             "@context": "https://schema.org", "@type": "JobPosting",
