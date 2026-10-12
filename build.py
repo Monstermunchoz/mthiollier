@@ -11,7 +11,7 @@ Aucune dépendance hors bibliothèque standard.
 import json, re, html, datetime, pathlib
 
 ROOT = pathlib.Path(__file__).parent
-SITE = "https://mthiollierconseils.fr"
+SITE = "https://www.mthiollierconseils.fr"
 BRAND = "M. Thiollier Conseils"
 PHONE = "06 43 64 29 64"
 EMAIL = "mickael@mthiollierconseils.fr"
