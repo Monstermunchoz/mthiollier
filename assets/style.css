@@ -885,3 +885,7 @@ h1 em,h2 em{font-family:inherit;font-style:normal;font-weight:inherit;color:inhe
 .art-body a.btn,.toc a.btn{text-decoration:none}
 .art-body a.btn-dark,.toc a.btn-dark{color:#fff}
 .art-body a.btn-primary,.toc a.btn-primary{color:var(--orange-ink)}
+/* Titre en gras au-dessus du texte dans les listes à icône */
+b.lead{display:block;margin-bottom:4px;color:var(--ink);font-weight:800}
+.s-navy b.lead{color:#fff}
+@media (max-width:640px){.checks li,.rdv-list li{margin-bottom:10px}}
