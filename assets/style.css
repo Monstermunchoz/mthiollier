@@ -783,3 +783,26 @@ h1 em,h2 em{font-family:inherit;font-style:normal;font-weight:inherit;color:inhe
   body.has-fab .foot{padding-bottom:110px}
 }
 @media (max-width:640px){.nav-cta .btn-primary{display:none}.brand-text{display:grid!important}.brand-text small{display:none}}
+
+/* Portrait de Mickaël en tête de page */
+.hero-portrait{position:relative;border-radius:var(--r-lg);background:linear-gradient(160deg,var(--teal-dark) 0%,var(--teal) 100%);padding:clamp(36px,4vw,52px) clamp(24px,3vw,40px) clamp(28px,3vw,36px);display:grid;justify-items:center;gap:22px;color:#fff;text-align:center;box-shadow:var(--shadow-lg);overflow:hidden}
+.hp-photo{width:min(260px,70%);height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 0 0 8px rgba(255,255,255,.14),0 24px 50px -18px rgba(0,0,0,.55)}
+.hp-id{display:grid;gap:4px}
+.hp-id b{font-size:1.45rem;font-weight:800;letter-spacing:-.02em}
+.hp-id span{font-size:.92rem;color:rgba(255,255,255,.78)}
+.hp-facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);width:100%;border-top:1px solid rgba(255,255,255,.18);padding-top:20px}
+.hp-facts li{display:grid;gap:2px}
+.hp-facts li+li{border-left:1px solid rgba(255,255,255,.18)}
+.hp-facts b{font-size:1.5rem;font-weight:800;line-height:1.1;color:#fff}
+.hp-facts span{font-size:.78rem;color:rgba(255,255,255,.72)}
+.hp-creds{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--teal-2);font-size:.82rem;font-weight:700;padding:8px 14px;border-radius:999px}
+.hp-creds .i{width:16px;height:16px}
+@media (max-width:960px){.hero-media{max-width:520px;margin-inline:auto;width:100%}}
+@media (max-width:640px){
+  .hero-grid{display:flex;flex-direction:column}
+  .hero-media{order:-1}
+  .hero-portrait{padding:28px 18px 22px;gap:16px}
+  .hp-photo{width:170px}
+  .hp-id b{font-size:1.25rem}
+  .hp-facts b{font-size:1.25rem}
+}
