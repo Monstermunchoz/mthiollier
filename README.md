@@ -41,3 +41,7 @@ Dans Vercel > Settings > Environment Variables, renseigner :
 - `MAIL_FROM` (optionnel)
 
 Puis redéployer. Tant que ces variables sont absentes, le formulaire affiche un message d'erreur au lieu de confirmer l'envoi.
+
+### Diagnostic de l'envoi
+
+Ouvrir `https://www.mthiollierconseils.fr/api/send?check=1` : la page indique les variables manquantes, ou teste la connexion au serveur SMTP et affiche l'erreur éventuelle (aucun mot de passe n'est affiché).

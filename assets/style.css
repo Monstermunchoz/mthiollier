@@ -889,3 +889,7 @@ h1 em,h2 em{font-family:inherit;font-style:normal;font-weight:inherit;color:inhe
 b.lead{display:block;margin-bottom:4px;color:var(--ink);font-weight:800}
 .s-navy b.lead{color:#fff}
 @media (max-width:640px){.checks li,.rdv-list li{margin-bottom:10px}}
+/* Libellés flottants : toujours sur une ligne, jamais par-dessus le texte saisi */
+.float-field>span{right:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.float-field textarea{padding-top:30px;min-height:120px}
+.float-field textarea:focus+span,.float-field textarea:not(:placeholder-shown)+span{transform:translateY(-10px) scale(.76);right:auto;max-width:calc((100% - 34px) / .76)}
